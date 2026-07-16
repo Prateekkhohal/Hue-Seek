@@ -1,0 +1,66 @@
+- !<AssetImportMetadata/0f789528-f773-4771-a0a7-a7789dbbb345>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 2c499a6b-95e5-4805-8ebc-cf63d22a60c8
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 2c499a6b-95e5-4805-8ebc-cf63d22a60c8
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> ac1f0a70-cede-412e-9454-d4c363b0d4a8
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/ac1f0a70-cede-412e-9454-d4c363b0d4a8>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  VersionPrerelease: ""
+  ComponentUid: fc64feff-1dca-4fc3-95a3-a4c7a7818448
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    baseIconTexture: false
+    characterRoot: false
+    clampX: false
+    clampYBottom: false
+    clampYTop: false
+    joystickBase: false
+    joystickKnob: false
+    moveSpeed: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - characterRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      joystickBase: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      joystickKnob: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      baseIconTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      moveSpeed: !<float> 50.000000
+      clampX: !<float> 40.000000
+      clampYTop: !<float> 25.000000
+      clampYBottom: !<float> 45.000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input SceneObject characterRoot
+    - // @input Component.ScreenTransform joystickBase
+    - // @input Component.ScreenTransform joystickKnob
+    - // @input Asset.Texture baseIconTexture
+    - // @input float moveSpeed = 50
+    - // @input float clampX = 40
+    - // @input float clampYTop = 25
+    - // @input float clampYBottom = 45

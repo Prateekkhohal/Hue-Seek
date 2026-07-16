@@ -1,0 +1,48 @@
+- !<AssetImportMetadata/420e7593-20c6-4641-a051-af81b61c78b9>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 0a48677d-e960-4493-8bdc-692f482ba743
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 0a48677d-e960-4493-8bdc-692f482ba743
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 04801acf-d742-4a31-ad6a-43f0e7a9bb61
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/04801acf-d742-4a31-ad6a-43f0e7a9bb61>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  VersionPrerelease: ""
+  ComponentUid: c48f9770-8d80-4d3f-9c69-2feaf06e5a7a
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    cameraTexture: false
+    pictureTexture: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - pictureTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      cameraTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input Asset.Texture pictureTexture
+    - // @input Asset.Texture cameraTexture

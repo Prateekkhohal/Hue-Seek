@@ -1,0 +1,90 @@
+- !<AssetImportMetadata/f38baef9-ca0e-4503-9d74-34d7dfef97bd>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> ce39e080-3664-4ff3-ad36-60d7554904fd
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> ce39e080-3664-4ff3-ad36-60d7554904fd
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 437d237a-2b19-4cc1-85b2-7cbb8bc25bd6
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/437d237a-2b19-4cc1-85b2-7cbb8bc25bd6>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  VersionPrerelease: ""
+  ComponentUid: d27332e6-f6b0-4152-9012-241c889abf99
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    closeZone: false
+    eraserZone: false
+    eyedropZone: false
+    knobA: false
+    knobB: false
+    knobG: false
+    knobR: false
+    paintController: false
+    panelBg: false
+    panelRoot: false
+    toggleZone: false
+    trackA: false
+    trackB: false
+    trackG: false
+    trackR: false
+    wheelImage: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - paintController: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
+      panelRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      panelBg: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      wheelImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      toggleZone: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      closeZone: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      eyedropZone: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      eraserZone: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      trackR: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      trackG: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      trackB: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      trackA: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      knobR: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      knobG: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      knobB: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      knobA: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input AssignableType_1 paintController
+    - // @input SceneObject panelRoot
+    - // @input Component.Image panelBg
+    - // @input Component.Image wheelImage
+    - // @input Component.ScreenTransform toggleZone
+    - // @input Component.ScreenTransform closeZone
+    - // @input Component.ScreenTransform eyedropZone
+    - // @input Component.ScreenTransform eraserZone
+    - // @input Component.ScreenTransform trackR
+    - // @input Component.ScreenTransform trackG
+    - // @input Component.ScreenTransform trackB
+    - // @input Component.ScreenTransform trackA
+    - // @input Component.ScreenTransform knobR
+    - // @input Component.ScreenTransform knobG
+    - // @input Component.ScreenTransform knobB
+    - // @input Component.ScreenTransform knobA

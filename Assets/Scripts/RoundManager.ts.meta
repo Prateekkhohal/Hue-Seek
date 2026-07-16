@@ -1,0 +1,82 @@
+- !<AssetImportMetadata/9bd4e35e-a164-4ae6-9229-e4781122310c>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> bd11c3e9-9e26-4192-ac50-4075cc0fba19
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> bd11c3e9-9e26-4192-ac50-4075cc0fba19
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 16b174a3-cad6-4c62-b0f3-634c3e9cd0dc
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/16b174a3-cad6-4c62-b0f3-634c3e9cd0dc>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  VersionPrerelease: ""
+  ComponentUid: ef694eb2-59ec-48da-9563-596c8bbfa407
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    cameraTexture: false
+    characterRoot: false
+    hiddenThreshold: false
+    joystick: false
+    mainCamera: false
+    paintController: false
+    stageBackgroundRoot: false
+    stageImage: false
+    stageTextures: false
+    submitIconTexture: false
+    submitImage: false
+    submitZone: false
+    timerText: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - paintController: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
+      joystick: !<MappingBased.AssignableType_2> 00000000-0000-0000-0000-000000000000
+      timerText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      stageBackgroundRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      stageImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      stageTextures: !<reference.Texture[]>
+        []
+      characterRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      submitZone: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      submitImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      submitIconTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      mainCamera: !<reference.Camera> 00000000-0000-0000-0000-000000000000
+      cameraTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      hiddenThreshold: !<float> 65.000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input AssignableType_1 paintController
+    - // @input AssignableType_2 joystick
+    - // @input Component.Text timerText
+    - // @input SceneObject stageBackgroundRoot
+    - // @input Component.Image stageImage
+    - "// @input Asset.Texture[] stageTextures"
+    - // @input SceneObject characterRoot
+    - // @input Component.ScreenTransform submitZone
+    - // @input Component.Image submitImage
+    - // @input Asset.Texture submitIconTexture
+    - // @input Component.Camera mainCamera
+    - // @input Asset.Texture cameraTexture
+    - // @input float hiddenThreshold = 65

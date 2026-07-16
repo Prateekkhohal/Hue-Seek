@@ -1,0 +1,75 @@
+- !<AssetImportMetadata/cb6e9b6f-2d3b-47a2-8a76-05dd7a879c0b>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 50b8fb23-f464-4bce-bcba-89c4a502704a
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 50b8fb23-f464-4bce-bcba-89c4a502704a
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 72cc9376-85af-47c4-a51b-ac43f22274f4
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/72cc9376-85af-47c4-a51b-ac43f22274f4>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  VersionPrerelease: ""
+  ComponentUid: 5484e977-c8df-4982-ba49-af13e34bf6b0
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    brushCursorTexture: false
+    camera: false
+    characterRoot: false
+    currentColorImage: false
+    cursorImage: false
+    dabMaterial: false
+    dabMesh: false
+    dabScale: false
+    eyedropExcludeZone: false
+    maxDabs: false
+    pickerCursorTexture: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - camera: !<reference.Camera> 00000000-0000-0000-0000-000000000000
+      characterRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      dabMesh: !<reference.RenderMesh> 00000000-0000-0000-0000-000000000000
+      dabMaterial: !<reference.Material> 00000000-0000-0000-0000-000000000000
+      dabScale: 3.500000
+      maxDabs: !<float> 400.000000
+      eyedropExcludeZone: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      currentColorImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      cursorImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      brushCursorTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      pickerCursorTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input Component.Camera camera
+    - // @input SceneObject characterRoot
+    - // @input Asset.RenderMesh dabMesh
+    - // @input Asset.Material dabMaterial
+    - // @input float dabScale = 3.5
+    - // @input float maxDabs = 1500
+    - // @input Component.ScreenTransform eyedropExcludeZone
+    - // @input Component.Image currentColorImage
+    - // @input Component.Image cursorImage
+    - // @input Asset.Texture brushCursorTexture
+    - // @input Asset.Texture pickerCursorTexture

@@ -1,0 +1,46 @@
+#!/bin/sh
+# Auto-bump the project version on every commit.
+#
+# Scheme (x.y.z):
+#   patch (z) -> bug fixes        [default]
+#   minor (y) -> feature added     BUMP=minor git commit ...
+#   major (x) -> major revamp      BUMP=major git commit ...
+#   skip      -> no bump           BUMP=none  git commit ...
+#
+# Requires once per clone: git config core.hooksPath .githooks
+
+[ "$BUMP" = "none" ] && exit 0
+
+VERSION_FILE="VERSION"
+[ -f "$VERSION_FILE" ] || exit 0
+
+# If VERSION was staged by hand, respect that and don't double-bump.
+if git diff --cached --name-only | grep -qx "$VERSION_FILE"; then
+    exit 0
+fi
+
+v=$(tr -d ' \r\n' < "$VERSION_FILE")
+major=${v%%.*}
+rest=${v#*.}
+minor=${rest%%.*}
+patch=${rest#*.}
+
+case "${BUMP:-patch}" in
+    major) major=$((major + 1)); minor=0; patch=0 ;;
+    minor) minor=$((minor + 1)); patch=0 ;;
+    patch) patch=$((patch + 1)) ;;
+    *) echo "pre-commit: unknown BUMP='$BUMP' (use major|minor|patch|none)" >&2; exit 1 ;;
+esac
+
+new="$major.$minor.$patch"
+printf '%s\n' "$new" > "$VERSION_FILE"
+git add "$VERSION_FILE"
+
+# Keep the in-lens constant in sync so the Lens can display its version.
+VTS="Assets/Scripts/Version.ts"
+if [ -f "$VTS" ]; then
+    sed -i "s/LENS_VERSION = \"[0-9][0-9.]*\"/LENS_VERSION = \"$new\"/" "$VTS"
+    git add "$VTS"
+fi
+
+echo "pre-commit: version bumped to $new (${BUMP:-patch})"
