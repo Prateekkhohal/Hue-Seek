@@ -8,7 +8,7 @@
 // Painting is suspended while the panel is open.
 
 import { PaintController } from "./PaintController";
-import { makeSolidWhiteTexture } from "./PaletteSampler";
+import { makeSolidWhiteTexture, whitenIcon } from "./PaletteSampler";
 
 const WHEEL_PX = 160;
 
@@ -32,11 +32,14 @@ export class ColorPickerController extends BaseScriptComponent {
   @input
   closeZone: ScreenTransform; // X button
 
-  @input
+  @input  
   eyedropZone: ScreenTransform; // eyedropper button
 
   @input
   eraserZone: ScreenTransform; // eraser toggle button
+
+  @input
+  pickIconTexture: Texture; // color-picker icon for the Pick button
 
   @input
   trackR: ScreenTransform;
@@ -105,8 +108,19 @@ export class ColorPickerController extends BaseScriptComponent {
         .getComponent("Component.ScreenTransform") as ScreenTransform;
     }
     this.styleSliderVisuals();
-    // Tool buttons: eyedropper (blue) and eraser (red).
-    this.styleToolButton(this.eyedropZone, new vec4(0.2, 0.45, 0.9, 0.95));
+    // Tool buttons: eyedropper shows the color-picker icon; eraser stays red.
+    if (this.eyedropZone && this.pickIconTexture) {
+      const img = this.eyedropZone
+        .getSceneObject()
+        .getComponent("Component.Image") as Image;
+      if (img) {
+        img.mainMaterial = img.mainMaterial.clone();
+        img.mainPass.baseTex = whitenIcon(this.pickIconTexture);
+        img.mainPass.baseColor = new vec4(0.45, 0.7, 1, 1);
+      }
+    } else {
+      this.styleToolButton(this.eyedropZone, new vec4(0.2, 0.45, 0.9, 0.95));
+    }
     this.styleToolButton(this.eraserZone, new vec4(0.85, 0.3, 0.3, 0.95));
     if (this.panelRoot) this.panelRoot.enabled = false;
   }

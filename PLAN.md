@@ -4,6 +4,66 @@ Working checklist for the MVP build. Spec and design decisions live in
 [CLAUDE.md](CLAUDE.md) — this file only tracks execution. Check items
 off as they're completed and verified in Lens Studio, not just written.
 
+## CURRENT STATE (resume point for any new session — updated 2026-07-16)
+
+**MVP Phases 0–5 are COMPLETE and verified in Preview.** Project is saved.
+The full loop works: Landing (title + LIVE/PICTURE + 60/120/240s picker) →
+round (random stage picture or camera feed, capsule character, joystick,
+painting) → AI Score screen → play again.
+
+Scene structure (all built via editor scripting, all wired):
+- `GameManager` (root) holds ALL logic script components: GameFlowManager,
+  RoundManager, PaintController, JoystickController, ColorPickerController.
+  Cross-references wired via editor dynamic property access.
+- `UI Camera` (ortho, near=-500, order 10, own LayerSet) → `Landing`,
+  `Round` (TimerText, JoystickBase+Knob, CurrentColorIndicator,
+  ColorPickerPanel with wheel/RGBA sliders/Pick/Erase, SubmitButton,
+  TouchCursor), `Score` (4 texts) roots.
+- `Stage Camera` (ortho, order -10, own layer) → `StageBackground` Image
+  (random of 11 Stage* textures per Picture round).
+- `Camera Object` (perspective, order 0) renders `Character` (6 capsule
+  parts w/ colliders) + runtime `Dab` objects.
+
+Current feature set (each user-requested and verified):
+- Color picker panel: HSV wheel + R/G/B/A sliders + Pick (one-shot
+  eyedropper from real background pixels) + Erase toggle. NO palette,
+  NO background-tap picking. Indicator button opens panel.
+- Painting (v5 — TEXTURE-LAYER): each rig part has a 128² procedural
+  canvas texture (SimplePBRMaterial clone, CPU buffer + setPixels).
+  Stamps map hit → part-local → cylindrical UV (u=atan2(z,x) wrap,
+  v=(y+50)/100, anisotropic elliptical brush). Overpaint = pixel
+  overwrite (NO dab objects, NO z-fighting); eraser stamps base color
+  (235,235,240). Stamp history (UV) kept for scoring; UV-space spacing
+  throttle; 0.3s round-start grace. Touch cursor: brush icon in live
+  paint color / picker icon when eyedrop armed, exactly at touch point.
+  Submit (green tick, top-right) ends round early. Palette button is
+  NEVER color-tinted (user decision); dims 35% in eraser mode.
+  Precision: strokes interpolate between touch-move events (no gaps on
+  fast drags); per-part mesh geometry measured (capsule r=25 h=100,
+  sphere r=50) so brush is round and correctly sized. Paint-splash
+  droplets (2-3 tiny spheres, normal-biased spray, gravity, shrink,
+  0.3-0.5s life, 20-particle budget) spawn per stamp.
+- Joystick: user-positioned, controller icon base + circle knob marker.
+- DynaPuff-SemiBold font applied to all 19 Texts.
+- Icons (user-added, black → whitened at runtime for tinting):
+  controller, paint-brush, color-picker, check, cross, palette.
+- Scoring: PaletteSampler (getPixels) around final position → Blend 50% +
+  Creativity 20% + Technique 30% = AI Score, hidden threshold 65.
+
+**Immediate next steps:** on-device test via Pairing (validates getPixels
++ full loop on hardware); export size check (raw stage PNGs 17.6MB →
+expect ~5.5MB compressed, budget 8MB, fallback resize to 512/drop to 8);
+hand playtest for score-weight tuning. Then Phase 6 (leaderboards, remote
+pictures) only after the MVP is fun.
+
+**Gotchas for future sessions** (full list in CLAUDE.md "Verified
+technical findings" — READ IT FIRST): ortho cameras need negative near;
+Text backgroundSettings hugs glyphs (use Image+"Image" material for
+rects); "ImageMaterial" asset is a broken stub, "Image" is the real one;
+primitive meshes are 100 units at scale 1; runtime-created objects need
+layer copied from parent; black icons need whitenIcon() before tinting;
+scene-serialized @input values override script defaults after edits.
+
 ## Phase 0 — Housekeeping ✅
 
 - [x] Create `Assets/Scripts/` folder
