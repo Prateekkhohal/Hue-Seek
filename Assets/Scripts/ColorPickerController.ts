@@ -42,6 +42,9 @@ export class ColorPickerController extends BaseScriptComponent {
   pickIconTexture: Texture; // color-picker icon for the Pick button
 
   @input
+  eraserIconTexture: Texture; // eraser icon for the Erase button
+
+  @input
   trackR: ScreenTransform;
 
   @input
@@ -121,7 +124,18 @@ export class ColorPickerController extends BaseScriptComponent {
     } else {
       this.styleToolButton(this.eyedropZone, new vec4(0.2, 0.45, 0.9, 0.95));
     }
-    this.styleToolButton(this.eraserZone, new vec4(0.85, 0.3, 0.3, 0.95));
+    if (this.eraserZone && this.eraserIconTexture) {
+      const img = this.eraserZone
+        .getSceneObject()
+        .getComponent("Component.Image") as Image;
+      if (img) {
+        img.mainMaterial = img.mainMaterial.clone();
+        img.mainPass.baseTex = whitenIcon(this.eraserIconTexture);
+        img.mainPass.baseColor = new vec4(1, 0.45, 0.45, 1);
+      }
+    } else {
+      this.styleToolButton(this.eraserZone, new vec4(0.85, 0.3, 0.3, 0.95));
+    }
     if (this.panelRoot) this.panelRoot.enabled = false;
   }
 

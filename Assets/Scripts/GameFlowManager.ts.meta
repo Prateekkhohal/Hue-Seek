@@ -27,19 +27,20 @@
   ExportUid: 00000000-0000-0000-0000-000000000000
   PackagePolicy: CanBeUnpacked
   ScriptInputsHidden:
+    finishHappyTexture: false
+    finishSadTexture: false
     landingRoot: false
     liveButtonText: false
     pictureButtonText: false
     roundManager: false
     roundRoot: false
+    scoreBackgroundImage: false
     scoreDetailText: false
     scoreRoot: false
     scoreTitleText: false
     scoreVerdictText: false
     sharePromptText: false
-    timer120Text: false
-    timer240Text: false
-    timer60Text: false
+    userCameraRoot: false
   ScriptTypesHidden:
     {}
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
@@ -54,14 +55,15 @@
       scoreRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       liveButtonText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       pictureButtonText: !<reference.Text> 00000000-0000-0000-0000-000000000000
-      timer60Text: !<reference.Text> 00000000-0000-0000-0000-000000000000
-      timer120Text: !<reference.Text> 00000000-0000-0000-0000-000000000000
-      timer240Text: !<reference.Text> 00000000-0000-0000-0000-000000000000
       roundManager: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
       scoreTitleText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       scoreVerdictText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       scoreDetailText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       sharePromptText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      userCameraRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      scoreBackgroundImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      finishHappyTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      finishSadTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
@@ -71,11 +73,12 @@
     - // @input SceneObject scoreRoot
     - // @input Component.Text liveButtonText
     - // @input Component.Text pictureButtonText
-    - // @input Component.Text timer60Text
-    - // @input Component.Text timer120Text
-    - // @input Component.Text timer240Text
     - // @input AssignableType_1 roundManager
     - // @input Component.Text scoreTitleText
     - // @input Component.Text scoreVerdictText
     - // @input Component.Text scoreDetailText
     - // @input Component.Text sharePromptText
+    - // @input SceneObject userCameraRoot
+    - // @input Component.Image scoreBackgroundImage
+    - // @input Asset.Texture finishHappyTexture
+    - // @input Asset.Texture finishSadTexture

@@ -9,9 +9,11 @@
 // The eyedropper is armed ONLY by the color picker panel's Pick button.
 
 import {
-  samplePixelColor,
   makeSolidWhiteTexture,
   whitenIcon,
+  createPixelSampler,
+  sampleFromSampler,
+  PixelSampler,
 } from "./PaletteSampler";
 
 const CANVAS = 128; // px per part canvas (128² is plenty for a capsule)
@@ -79,6 +81,15 @@ export class PaintController extends BaseScriptComponent {
   @input
   splashMaterial: Material; // flat "Image" material, cloned + tinted
 
+  @input
+  eraserCursorTexture: Texture; // eraser icon while erasing
+
+  @input
+  brushCursorOffset: vec2; // cursor anchor offset (tune in Inspector)
+
+  @input
+  pickerCursorOffset: vec2;
+
   private paintingEnabled: boolean = false;
   private suspended: boolean = false;
   private eyedropArmed: boolean = false;
@@ -96,6 +107,8 @@ export class PaintController extends BaseScriptComponent {
   private lastTouchPos: vec2 | null = null; // for stroke interpolation
   private splashes: Splash[] = [];
   private splashMats: { [key: string]: Material } = {};
+  private eraserTex: Texture | null = null;
+  private eyedropSampler: PixelSampler | null = null;
 
   onAwake() {
     this.createEvent("OnStartEvent").bind(() => {
@@ -108,6 +121,13 @@ export class PaintController extends BaseScriptComponent {
     );
     this.createEvent("TouchMoveEvent").bind((e) => {
       const pos = e.getTouchPosition();
+      // Realtime eyedropper: while armed, dragging live-previews the
+      // color under the finger — no painting until released.
+      if (this.eyedropArmed && this.paintingEnabled && !this.suspended) {
+        this.eyedropLive(pos);
+        this.updateCursor(pos, true);
+        return;
+      }
       // Interpolate between successive move events so fast strokes don't
       // leave gaps ("misses") between raycasts.
       if (this.lastTouchPos !== null) {
@@ -128,6 +148,11 @@ export class PaintController extends BaseScriptComponent {
     });
     this.createEvent("TouchEndEvent").bind(() => {
       this.lastTouchPos = null;
+      if (this.eyedropArmed) {
+        // Release confirms the previewed color and ends eyedrop mode.
+        this.eyedropArmed = false;
+        this.eyedropSampler = null;
+      }
       this.hideCursor();
     });
     this.createEvent("UpdateEvent").bind(() => this.updateSplashes());
@@ -139,10 +164,11 @@ export class PaintController extends BaseScriptComponent {
     if (!this.currentColorImage) return;
     this.currentColorImage.mainMaterial =
       this.currentColorImage.mainMaterial.clone();
+    // The palette button shows the icon exactly as authored — original
+    // colors, no whitening, never tinted with the paint color.
     this.currentColorImage.mainPass.baseTex = this.indicatorIconTexture
-      ? whitenIcon(this.indicatorIconTexture)
+      ? this.indicatorIconTexture
       : makeSolidWhiteTexture();
-    // The palette button keeps its own look — never tinted with the color.
     this.currentColorImage.mainPass.baseColor = new vec4(1, 1, 1, 1);
     this.indicatorReady = true;
   }
@@ -155,6 +181,9 @@ export class PaintController extends BaseScriptComponent {
     }
     if (this.pickerCursorTexture) {
       this.pickerTex = whitenIcon(this.pickerCursorTexture);
+    }
+    if (this.eraserCursorTexture) {
+      this.eraserTex = whitenIcon(this.eraserCursorTexture);
     }
     this.cursorST = this.cursorImage
       .getSceneObject()
@@ -234,6 +263,10 @@ export class PaintController extends BaseScriptComponent {
 
   armEyedropOnce() {
     this.eyedropArmed = true;
+    // Snapshot the background once so live-drag sampling stays cheap.
+    this.eyedropSampler = this.backgroundTexture
+      ? createPixelSampler(this.backgroundTexture)
+      : null;
   }
 
   setBackgroundTexture(tex: Texture) {
@@ -263,14 +296,27 @@ export class PaintController extends BaseScriptComponent {
 
   private onTouchStart(screenPos: vec2) {
     if (this.eyedropArmed && this.paintingEnabled && !this.suspended) {
-      this.eyedropArmed = false;
+      // Stay armed: the drag live-previews; release confirms.
+      this.eyedropLive(screenPos);
       this.updateCursor(screenPos, true);
-      this.eyedrop(screenPos);
       return;
     }
     this.lastStampUV = null; // new stroke
     this.tryPaint(screenPos);
     this.updateCursor(screenPos, false);
+  }
+
+  private eyedropLive(screenPos: vec2) {
+    if (!this.eyedropSampler) return;
+    const color = sampleFromSampler(
+      this.eyedropSampler,
+      screenPos.x,
+      1 - screenPos.y
+    );
+    if (color) {
+      this.currentColor = color;
+      this.eraserMode = false;
+    }
   }
 
   private tryPaint(screenPos: vec2) {
@@ -391,10 +437,10 @@ export class PaintController extends BaseScriptComponent {
 
   private spawnSplash(hit: RayCastHit, color: vec4) {
     if (!this.splashMesh || !this.splashMaterial) return;
-    if (this.splashes.length > 20) return; // particle budget
+    if (this.splashes.length > 40) return; // particle budget
     try {
       const n = hit.normal;
-      const count = 2 + Math.floor(Math.random() * 2);
+      const count = 4 + Math.floor(Math.random() * 3);
       for (let i = 0; i < count; i++) {
         const obj = global.scene.createSceneObject("Splash");
         obj.layer = this.characterRoot.layer;
@@ -458,30 +504,6 @@ export class PaintController extends BaseScriptComponent {
     }
   }
 
-  private eyedrop(screenPos: vec2) {
-    if (!this.backgroundTexture) return;
-    if (
-      this.eyedropExcludeZone &&
-      this.eyedropExcludeZone.containsScreenPoint(screenPos)
-    ) {
-      return;
-    }
-    if (this.currentColorImage) {
-      const st = this.currentColorImage
-        .getSceneObject()
-        .getComponent("Component.ScreenTransform") as ScreenTransform;
-      if (st && st.containsScreenPoint(screenPos)) return;
-    }
-    const color = samplePixelColor(
-      this.backgroundTexture,
-      screenPos.x,
-      1 - screenPos.y
-    );
-    if (color) {
-      this.setCurrentColor(color);
-    }
-  }
-
   // --- touch cursor ---
 
   private updateCursor(pos: vec2, pickerMode: boolean) {
@@ -490,22 +512,36 @@ export class PaintController extends BaseScriptComponent {
       this.hideCursor();
       return;
     }
-    const tex = pickerMode ? this.pickerTex : this.brushTex;
+    const eraser = !pickerMode && this.eraserMode;
+    const tex = pickerMode
+      ? this.pickerTex
+      : eraser && this.eraserTex
+        ? this.eraserTex
+        : this.brushTex;
     if (!tex) return;
     this.cursorImage.getSceneObject().enabled = true;
     this.cursorImage.mainPass.baseTex = tex;
     this.cursorImage.mainPass.baseColor = pickerMode
-      ? new vec4(1, 1, 1, 0.95)
-      : this.eraserMode
-        ? new vec4(1, 1, 1, 0.45)
+      ? // Live eyedrop: show the color being previewed under the finger.
+        new vec4(
+          this.currentColor.r,
+          this.currentColor.g,
+          this.currentColor.b,
+          1
+        )
+      : eraser
+        ? new vec4(1, 1, 1, 0.85)
         : new vec4(
             this.currentColor.r,
             this.currentColor.g,
             this.currentColor.b,
             0.95
           );
+    const off = pickerMode ? this.pickerCursorOffset : this.brushCursorOffset;
+    const ox = off ? off.x : 0;
+    const oy = off ? off.y : 0;
     this.cursorST.anchors.setCenter(
-      new vec2(pos.x * 2 - 1, (1 - pos.y) * 2 - 1)
+      new vec2(pos.x * 2 - 1 + ox, (1 - pos.y) * 2 - 1 + oy)
     );
   }
 

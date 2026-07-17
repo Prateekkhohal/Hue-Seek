@@ -109,6 +109,14 @@ share the Lens with friends to compare scores.
   - Hierarchy: ortho Camera → state roots with ScreenTransform as
     direct children (no Canvas — a Canvas doesn't auto-fit the camera
     and mis-scales anchors).
+  - Responsive layout (2026-07-17): HUD lives under per-root "SafeArea"
+    objects carrying BOTH a full-anchor ScreenTransform AND a
+    ScreenRegionComponent (SafeRender) — the region component alone
+    collapses children into a centered blob. Square controls use
+    fixed-size constraints (point anchor + unit offsets +
+    fixedWidth/fixedHeight; screen height = 20 units) so they never
+    distort across aspects. Backgrounds and the TouchCursor stay
+    full-frame (cursor math uses full-screen touch coords).
   - Camera renderOrder: LOWER renders earlier; the UI camera gets a
     higher renderOrder than the main camera and shares its Render
     Target.

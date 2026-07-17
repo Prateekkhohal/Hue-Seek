@@ -9,8 +9,6 @@ export type GameMode = "live" | "picture";
 
 type FlowState = "landing" | "round" | "score";
 
-const BG_IDLE = new vec4(0.13, 0.13, 0.18, 0.85);
-const BG_SELECTED = new vec4(0.95, 0.55, 0.1, 0.95);
 const BG_MODE = new vec4(0.2, 0.35, 0.75, 0.9);
 
 @component
@@ -31,15 +29,6 @@ export class GameFlowManager extends BaseScriptComponent {
   pictureButtonText: Text;
 
   @input
-  timer60Text: Text;
-
-  @input
-  timer120Text: Text;
-
-  @input
-  timer240Text: Text;
-
-  @input
   roundManager: RoundManager;
 
   @input
@@ -54,13 +43,34 @@ export class GameFlowManager extends BaseScriptComponent {
   @input
   sharePromptText: Text; // share nudge + play-again hint
 
+  @input
+  userCameraRoot: SceneObject; // circular face-cam UI — hidden during LIVE rounds
+
+  @input
+  scoreBackgroundImage: Image; // full-screen Finish art behind the score texts
+
+  @input
+  finishHappyTexture: Texture; // NOT FOUND (hidden) result art
+
+  @input
+  finishSadTexture: Texture; // SPOTTED result art
+
   private state: FlowState = "landing";
   private selectedMode: GameMode = "picture";
-  private selectedDurationSec: number = 60;
+  // Fixed round length (user decision 2026-07-17: no timer picker).
+  private selectedDurationSec: number = 120;
 
   onAwake() {
+    // The lens consumes every screen touch so Snapchat's default gestures
+    // (swipes, double-tap flip, pinch) can't fire mid-game. Snapchat's own
+    // chrome buttons render above the lens and stay usable. Plain taps are
+    // allowed through: Snapchat's native tap collapses its UI into the
+    // clean capture screen, and the tap still reaches the lens for gameplay.
+    global.touchSystem.touchBlocking = true;
+    global.touchSystem.enableTouchBlockingException("TouchTypeTap", true);
     this.createEvent("OnStartEvent").bind(() => {
       this.styleAllButtons();
+      this.setupScoreBackground();
       if (this.roundManager) {
         this.roundManager.setOnRoundEnd(() => this.showScore());
       }
@@ -84,6 +94,7 @@ export class GameFlowManager extends BaseScriptComponent {
   showLanding() {
     this.state = "landing";
     this.setRootsVisible(true, false, false);
+    this.setUserCameraVisible(true);
     if (this.roundManager) {
       this.roundManager.hideStage();
     }
@@ -93,6 +104,9 @@ export class GameFlowManager extends BaseScriptComponent {
     this.selectedMode = mode;
     this.state = "round";
     this.setRootsVisible(false, true, false);
+    // In Live mode the whole background IS the camera feed — the circular
+    // face-cam cutout is redundant there. Picture mode keeps it.
+    this.setUserCameraVisible(mode !== "live");
     if (this.roundManager) {
       this.roundManager.beginRound(mode, this.selectedDurationSec);
     }
@@ -108,9 +122,14 @@ export class GameFlowManager extends BaseScriptComponent {
   showScore() {
     this.state = "score";
     this.setRootsVisible(false, false, true);
+    this.setUserCameraVisible(true);
 
     const s = this.roundManager ? this.roundManager.getLastScore() : null;
     if (s) {
+      if (this.scoreBackgroundImage) {
+        const art = s.hidden ? this.finishHappyTexture : this.finishSadTexture;
+        if (art) this.scoreBackgroundImage.mainPass.baseTex = art;
+      }
       if (this.scoreTitleText) {
         this.scoreTitleText.text = "AI Score: " + s.aiScore;
       }
@@ -139,6 +158,20 @@ export class GameFlowManager extends BaseScriptComponent {
     if (this.scoreRoot) this.scoreRoot.enabled = score;
   }
 
+  private setUserCameraVisible(visible: boolean) {
+    if (this.userCameraRoot) this.userCameraRoot.enabled = visible;
+  }
+
+  private setupScoreBackground() {
+    if (!this.scoreBackgroundImage) return;
+    this.scoreBackgroundImage.mainMaterial =
+      this.scoreBackgroundImage.mainMaterial.clone();
+    if (this.finishHappyTexture) {
+      this.scoreBackgroundImage.mainPass.baseTex = this.finishHappyTexture;
+    }
+    this.scoreBackgroundImage.mainPass.baseColor = new vec4(1, 1, 1, 1);
+  }
+
   // --- input ---
 
   private onTouch(pos: vec2) {
@@ -151,13 +184,7 @@ export class GameFlowManager extends BaseScriptComponent {
   }
 
   private handleLandingTouch(pos: vec2) {
-    if (this.hitTest(this.timer60Text, pos)) {
-      this.selectDuration(60);
-    } else if (this.hitTest(this.timer120Text, pos)) {
-      this.selectDuration(120);
-    } else if (this.hitTest(this.timer240Text, pos)) {
-      this.selectDuration(240);
-    } else if (this.hitTest(this.liveButtonText, pos)) {
+    if (this.hitTest(this.liveButtonText, pos)) {
       this.startRound("live");
     } else if (this.hitTest(this.pictureButtonText, pos)) {
       this.startRound("picture");
@@ -172,33 +199,11 @@ export class GameFlowManager extends BaseScriptComponent {
     return st ? st.containsScreenPoint(pos) : false;
   }
 
-  private selectDuration(seconds: number) {
-    this.selectedDurationSec = seconds;
-    this.updateTimerHighlights();
-    print("GameFlow: round duration set to " + seconds + "s");
-  }
-
   // --- styling ---
 
   private styleAllButtons() {
     this.styleButton(this.liveButtonText, BG_MODE);
     this.styleButton(this.pictureButtonText, BG_MODE);
-    this.updateTimerHighlights();
-  }
-
-  private updateTimerHighlights() {
-    this.styleButton(
-      this.timer60Text,
-      this.selectedDurationSec === 60 ? BG_SELECTED : BG_IDLE
-    );
-    this.styleButton(
-      this.timer120Text,
-      this.selectedDurationSec === 120 ? BG_SELECTED : BG_IDLE
-    );
-    this.styleButton(
-      this.timer240Text,
-      this.selectedDurationSec === 240 ? BG_SELECTED : BG_IDLE
-    );
   }
 
   private styleButton(label: Text, bgColor: vec4) {

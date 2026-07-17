@@ -41,8 +41,97 @@ Current feature set (each user-requested and verified):
   Precision: strokes interpolate between touch-move events (no gaps on
   fast drags); per-part mesh geometry measured (capsule r=25 h=100,
   sphere r=50) so brush is round and correctly sized. Paint-splash
-  droplets (2-3 tiny spheres, normal-biased spray, gravity, shrink,
-  0.3-0.5s life, 20-particle budget) spawn per stamp.
+  droplets (4-6 tiny spheres, normal-biased spray, gravity, shrink,
+  0.3-0.5s life, 40-particle budget) spawn per stamp.
+  2026-07-17 additions: REALTIME eyedropper (Pick arms a cached
+  PixelSampler snapshot; touch-drag live-previews the color on the
+  picker cursor, release confirms); public Inspector offsets
+  brushCursorOffset/pickerCursorOffset on PaintController (default
+  0.045,0.075 = icon tip at touch); eraser icon (user asset) on the
+  Erase button + eraser-mode cursor; TIMER PICKER REMOVED — fixed 120s
+  (user decision), Timer60/120/240 objects deleted and inputs removed
+  from GameFlowManager (LS errors on null-wired declared @inputs — remove
+  the @input, don't null it). User added: landing art ("Landing" texture
+  on Screen Image under Landing root), "User-Camera" circular camera
+  cutout under UI Camera, Finish/Round-Circle-Background/Mask/
+  ScreenTexture textures, eraser icon.
+  2026-07-17 later batch (all verified in Preview):
+  - "User-Camera" face cutout HIDDEN during LIVE rounds (redundant over
+    the live feed; user decision), visible on landing/picture/score —
+    GameFlowManager `userCameraRoot` input + setUserCameraVisible().
+  - Score screen: full-screen Finish.jpg background ("FinishBackground"
+    Image under Score, root "Image" material cloned at runtime with
+    `finishTexture` input, stretch FillAndCut, renderOrder -1 so texts
+    stay on top). Score texts repositioned into the art's sky band
+    (title +0.42..+0.62, verdict +0.24..+0.40) and grass band (detail
+    -0.66..-0.54, share -0.92..-0.72).
+  - Palette button shows palette.png EXACTLY as authored — original
+    colors, whitenIcon() removed from setupIndicator (user decision:
+    never recolor the palette image; eraser-mode 35% dim kept).
+  - RESPONSIVE UI via built-in Screen Regions + constraints (user
+    decision — a custom ResponsiveUI.ts script was tried first and
+    deleted): each state root got a child SafeArea object
+    (ScreenTransform full-anchor + ScreenRegionComponent SafeRender —
+    BOTH components required, region alone collapses children) holding
+    the HUD: Landing/SafeArea (title+mode buttons), Round/SafeArea-Round
+    (timer, joystick, indicator, picker panel, submit),
+    Score/SafeArea-Score (4 texts), UI Camera/SafeArea-Top (User-Camera).
+    Backgrounds (Landing art, FinishBackground) + TouchCursor stay
+    full-frame outside the regions (cursor uses full-screen touch
+    coords). Square controls converted to fixed-size constraints
+    (point anchor + unit offsets + fixedWidth/fixedHeight, screen
+    height = 20 units): JoystickBase 2.3x2.75 @(-0.67,-0.61),
+    CurrentColorIndicator 1.4x1.4 @(0.76,-0.865), SubmitButton 1.5x1.5
+    @(0.815,0.45) (moved below Snap's right icon column), TouchCursor
+    1x1, ColorPickerPanel 6.5x8.6 @(0,-0.05). TimerText moved BELOW the
+    face circle (y +0.42..+0.56) + renderOrder -2 so the open picker
+    panel (bg renderOrder -1) covers it; TitleText y +0.28..+0.52.
+    Character rig scaled to 0.8. Verified with Snap UI overlay sim ON
+    (Galaxy S20): full loop, no chrome collisions, wheel circular,
+    painting works on scaled rig.
+  - DUAL TIMER (user request — live timer floated mid-face once the
+    circle hid): TimerTextTop duplicate at safe y +0.78..+0.92;
+    RoundManager `timerTextTop` input, beginRound enables top slot in
+    LIVE / below-circle slot (TimerText) in PICTURE, updateTimerLabel
+    writes both.
+  - Joystick + palette button mirrored per user request: both fixed
+    2.3x2.3 at (-0.7,-0.7) / (+0.7,-0.7).
+  - Second scale-down pass (user request): joystick/palette 2.0x2.0,
+    submit 1.3x1.3, cursor 0.85, picker panel 5.8x7.7, face circle 2.6,
+    timer font 46, character rig 0.65.
+  - Side-edge anchoring (user request — controls clipped on wide sims):
+    joystick/palette/submit anchor to the screen EDGE (anchor x = ±1)
+    with fixed 1.15-unit inward margins via unit offsets — margin is
+    constant on every device width. (Preview note: feeding a 9:16 video
+    into a taller device sim crops ~1.1 units per side off the render;
+    1.15 clears it. On-device the render matches the screen.)
+  - CAPTURE-MODE support (user request): the Round HUD region
+    ("CaptureArea-Round", ex SafeArea-Round) switched to
+    ScreenRegionType.Capture so the whole game stays inside the area
+    recorded in a snap — playable while capturing. Landing, Score, and
+    the face-cam circle stay SafeRender. Runtime enum is `Capture`
+    (docs may say CaptureRender — wrong).
+  - TOUCH BLOCKING: `global.touchSystem.touchBlocking = true` in
+    GameFlowManager.onAwake — the lens consumes ALL screen touches so
+    Snapchat gestures (carousel taps, swipes, double-tap camera flip)
+    can't fire mid-game. Snapchat's chrome buttons render above the
+    lens and stay usable (incl. the top-right camera-flip button, so
+    Live mode can still switch cameras). Re-allow a gesture later with
+    `global.touchSystem.enableTouchBlockingException("TouchTypeDoubleTap", true)`.
+    EXCEPTION added (user request): "TouchTypeTap" passes through — a
+    plain tap triggers Snapchat's native collapse of its UI into the
+    clean capture screen AND still reaches the lens for gameplay. Only
+    taps pass; pan/swipe/pinch/double-tap remain blocked. Related APIs
+    for later: SnapRecordStartEvent/SnapRecordStopEvent/
+    SnapImageCaptureEvent + scene.getRecordingState()
+    (Preview/Photo/Video) to react to recording — e.g. auto-hide hints
+    or pause the timer during capture. On-device verification needed
+    (preview doesn't simulate the tap-collapse).
+  - Score art now verdict-based (user assets): Finish-Happy.jpg when
+    hidden (NOT FOUND), Finish-Sad.jpg when SPOTTED —
+    `finishHappyTexture`/`finishSadTexture` inputs replace the single
+    finishTexture; texture swapped in showScore(). Sad branch verified
+    in Preview (score 0 → SPOTTED → sad art).
 - Joystick: user-positioned, controller icon base + circle knob marker.
 - DynaPuff-SemiBold font applied to all 19 Texts.
 - Icons (user-added, black → whitened at runtime for tinting):
@@ -117,8 +206,9 @@ scene-serialized @input values override script defaults after edits.
   0.3/layer (capped at 6) along the normal — verified red → cyan overpaint
 - [ ] Scoring note: painted-over dabs still count in color totals (hidden layers inflate Creativity
   slightly); revisit if playtesting shows it matters — eraser gives players a workaround
-- [ ] Picker polish: brighten Pick/Colors/X labels, wheel size is tuned for 9:16 (recompute for other
-  aspects), consider a brightness slider for the wheel (wheel is fixed at V=1; use RGB sliders to darken)
+- [ ] Picker polish: brighten Pick/Colors/X labels, ~~wheel size is tuned for 9:16 (recompute for other
+  aspects)~~ → fixed 2026-07-17 (panel is a fixed-size element inside the safe region now), consider a
+  brightness slider for the wheel (wheel is fixed at V=1; use RGB sliders to darken)
 - [x] Round timer using the selected duration, countdown UI top-center
 - [x] Full loop playable in Preview: land → Picture → move → paint → timer ends → score placeholder → landing
 - [ ] Polish (defer): clear default texture tint on swatches/joystick, rig proportions, dab size tuning, Landing button styling

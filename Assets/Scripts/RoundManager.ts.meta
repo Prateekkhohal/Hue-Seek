@@ -40,6 +40,7 @@
     submitImage: false
     submitZone: false
     timerText: false
+    timerTextTop: false
   ScriptTypesHidden:
     {}
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
@@ -52,6 +53,7 @@
     - paintController: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
       joystick: !<MappingBased.AssignableType_2> 00000000-0000-0000-0000-000000000000
       timerText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      timerTextTop: !<reference.Text> 00000000-0000-0000-0000-000000000000
       stageBackgroundRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       stageImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
       stageTextures: !<reference.Texture[]>
@@ -70,6 +72,7 @@
     - // @input AssignableType_1 paintController
     - // @input AssignableType_2 joystick
     - // @input Component.Text timerText
+    - // @input Component.Text timerTextTop
     - // @input SceneObject stageBackgroundRoot
     - // @input Component.Image stageImage
     - "// @input Asset.Texture[] stageTextures"

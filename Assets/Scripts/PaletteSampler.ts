@@ -119,6 +119,57 @@ function topColors(buckets: Map<string, Bucket>, maxColors: number): vec4[] {
     );
 }
 
+/** Reusable snapshot sampler — createFromTexture copies the whole
+ *  texture, so build once (e.g. when the eyedropper is armed) and then
+ *  sample many times cheaply during a drag. */
+export type PixelSampler = {
+  provider: ProceduralTextureProvider;
+  w: number;
+  h: number;
+};
+
+export function createPixelSampler(tex: Texture): PixelSampler | null {
+  try {
+    const procTex = ProceduralTextureProvider.createFromTexture(tex);
+    return {
+      provider: procTex.control as ProceduralTextureProvider,
+      w: tex.getWidth(),
+      h: tex.getHeight(),
+    };
+  } catch (e) {
+    print("PaletteSampler: createPixelSampler failed - " + e);
+    return null;
+  }
+}
+
+export function sampleFromSampler(
+  s: PixelSampler,
+  u: number,
+  v: number
+): vec4 | null {
+  try {
+    const region = Math.min(6, s.w, s.h);
+    const cx = Math.floor(clamp(u, 0, 1) * s.w);
+    const cy = Math.floor(clamp(v, 0, 1) * s.h);
+    const x = clamp(cx - Math.floor(region / 2), 0, s.w - region);
+    const y = clamp(cy - Math.floor(region / 2), 0, s.h - region);
+    const data = new Uint8Array(region * region * 4);
+    s.provider.getPixels(x, y, region, region, data);
+    let r = 0,
+      g = 0,
+      b = 0;
+    const n = region * region;
+    for (let i = 0; i < n; i++) {
+      r += data[i * 4];
+      g += data[i * 4 + 1];
+      b += data[i * 4 + 2];
+    }
+    return new vec4(r / n / 255, g / n / 255, b / n / 255, 1);
+  } catch (e) {
+    return null;
+  }
+}
+
 /**
  * Eyedropper: returns the average color of a small region around the
  * normalized point (u, v) of `tex`, or null if sampling fails. The small

@@ -18,7 +18,10 @@ export class RoundManager extends BaseScriptComponent {
   joystick: JoystickController;
 
   @input
-  timerText: Text;
+  timerText: Text; // Picture mode: sits below the face-cam circle
+
+  @input
+  timerTextTop: Text; // Live mode: top-center (the face-cam circle is hidden)
 
   @input
   stageBackgroundRoot: SceneObject; // BG camera object (Picture mode only)
@@ -112,6 +115,14 @@ export class RoundManager extends BaseScriptComponent {
     this.updateTimerLabel();
 
     const isPicture = mode === "picture";
+    // Two timer slots: Picture keeps the timer under the face-cam circle;
+    // Live (circle hidden) moves it to the freed top-center spot.
+    if (this.timerText) {
+      this.timerText.getSceneObject().enabled = isPicture;
+    }
+    if (this.timerTextTop) {
+      this.timerTextTop.getSceneObject().enabled = !isPicture;
+    }
     if (this.stageBackgroundRoot) {
       this.stageBackgroundRoot.enabled = isPicture;
     }
@@ -203,8 +214,9 @@ export class RoundManager extends BaseScriptComponent {
   }
 
   private updateTimerLabel() {
-    if (!this.timerText) return;
     const s = Math.max(0, Math.ceil(this.timeRemaining));
-    this.timerText.text = s + "s";
+    const label = s + "s";
+    if (this.timerText) this.timerText.text = label;
+    if (this.timerTextTop) this.timerTextTop.text = label;
   }
 }

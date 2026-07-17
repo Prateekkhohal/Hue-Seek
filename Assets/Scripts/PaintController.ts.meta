@@ -27,6 +27,7 @@
   ExportUid: 00000000-0000-0000-0000-000000000000
   PackagePolicy: CanBeUnpacked
   ScriptInputsHidden:
+    brushCursorOffset: false
     brushCursorTexture: false
     camera: false
     characterRoot: false
@@ -34,9 +35,11 @@
     cursorImage: false
     dabMaterial: false
     dabScale: false
+    eraserCursorTexture: false
     eyedropExcludeZone: false
     indicatorIconTexture: false
     maxDabs: false
+    pickerCursorOffset: false
     pickerCursorTexture: false
     splashMaterial: false
     splashMesh: false
@@ -62,6 +65,9 @@
       indicatorIconTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
       splashMesh: !<reference.RenderMesh> 00000000-0000-0000-0000-000000000000
       splashMaterial: !<reference.Material> 00000000-0000-0000-0000-000000000000
+      eraserCursorTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      brushCursorOffset: !<Vec2> {x: 0.000000, y: 0.000000}
+      pickerCursorOffset: !<Vec2> {x: 0.000000, y: 0.000000}
   ScriptTypes:
     -
       {}
@@ -79,3 +85,6 @@
     - // @input Asset.Texture indicatorIconTexture
     - // @input Asset.RenderMesh splashMesh
     - // @input Asset.Material splashMaterial
+    - // @input Asset.Texture eraserCursorTexture
+    - // @input vec2 brushCursorOffset
+    - // @input vec2 pickerCursorOffset

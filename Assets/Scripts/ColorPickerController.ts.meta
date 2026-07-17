@@ -28,6 +28,7 @@
   PackagePolicy: CanBeUnpacked
   ScriptInputsHidden:
     closeZone: false
+    eraserIconTexture: false
     eraserZone: false
     eyedropZone: false
     knobA: false
@@ -62,6 +63,7 @@
       eyedropZone: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
       eraserZone: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
       pickIconTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      eraserIconTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
       trackR: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
       trackG: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
       trackB: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
@@ -83,6 +85,7 @@
     - // @input Component.ScreenTransform eyedropZone
     - // @input Component.ScreenTransform eraserZone
     - // @input Asset.Texture pickIconTexture
+    - // @input Asset.Texture eraserIconTexture
     - // @input Component.ScreenTransform trackR
     - // @input Component.ScreenTransform trackG
     - // @input Component.ScreenTransform trackB
