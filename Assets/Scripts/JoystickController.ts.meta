@@ -28,13 +28,19 @@
   PackagePolicy: CanBeUnpacked
   ScriptInputsHidden:
     baseIconTexture: false
+    bodyHalfDown: false
+    bodyHalfUp: false
+    bodyHalfX: false
+    camera: false
     characterRoot: false
     clampX: false
     clampYBottom: false
     clampYTop: false
     joystickBase: false
     joystickKnob: false
+    moveAreaST: false
     moveSpeed: false
+    sndMove: false
   ScriptTypesHidden:
     {}
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
@@ -52,6 +58,12 @@
       clampX: !<float> 40.000000
       clampYTop: !<float> 25.000000
       clampYBottom: !<float> 45.000000
+      camera: !<reference.Camera> 00000000-0000-0000-0000-000000000000
+      moveAreaST: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      bodyHalfX: !<float> 6.000000
+      bodyHalfUp: !<float> 10.000000
+      bodyHalfDown: !<float> 12.000000
+      sndMove: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
@@ -64,3 +76,9 @@
     - // @input float clampX = 40
     - // @input float clampYTop = 25
     - // @input float clampYBottom = 45
+    - // @input Component.Camera camera
+    - // @input Component.ScreenTransform moveAreaST
+    - // @input float bodyHalfX = 6
+    - // @input float bodyHalfUp = 10
+    - // @input float bodyHalfDown = 12
+    - // @input Component.AudioComponent sndMove

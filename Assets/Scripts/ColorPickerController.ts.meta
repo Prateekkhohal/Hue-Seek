@@ -39,11 +39,14 @@
     panelBg: false
     panelRoot: false
     pickIconTexture: false
+    sndClick: false
+    swatchImage: false
     toggleZone: false
     trackA: false
     trackB: false
     trackG: false
     trackR: false
+    valueTexts: false
     wheelImage: false
   ScriptTypesHidden:
     {}
@@ -72,6 +75,10 @@
       knobG: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
       knobB: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
       knobA: !<reference.ScreenTransform> 00000000-0000-0000-0000-000000000000
+      swatchImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      valueTexts: !<reference.Text[]>
+        []
+      sndClick: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
@@ -94,3 +101,6 @@
     - // @input Component.ScreenTransform knobG
     - // @input Component.ScreenTransform knobB
     - // @input Component.ScreenTransform knobA
+    - // @input Component.Image swatchImage
+    - "// @input Component.Text[] valueTexts"
+    - // @input Component.AudioComponent sndClick

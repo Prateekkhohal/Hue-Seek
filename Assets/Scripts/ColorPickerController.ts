@@ -68,6 +68,15 @@ export class ColorPickerController extends BaseScriptComponent {
   @input
   knobA: ScreenTransform;
 
+  @input
+  swatchImage: Image; // live tile showing the currently selected color
+
+  @input
+  valueTexts: Text[]; // numeric R,G,B,A readouts right of the sliders
+
+  @input
+  sndClick: AudioComponent; // UI tap click for panel/tool buttons
+
   private wheelST: ScreenTransform;
   private solidTex: Texture;
   private open: boolean = false;
@@ -100,7 +109,18 @@ export class ColorPickerController extends BaseScriptComponent {
     if (this.panelBg) {
       this.panelBg.mainMaterial = this.panelBg.mainMaterial.clone();
       this.panelBg.mainPass.baseTex = this.solidTex;
-      this.panelBg.mainPass.baseColor = new vec4(0.07, 0.07, 0.09, 0.95);
+      // Same frosted-glass tint as the score panel.
+      this.panelBg.mainPass.baseColor = new vec4(0.07, 0.09, 0.13, 0.45);
+    }
+    if (this.swatchImage) {
+      this.swatchImage.mainMaterial = this.swatchImage.mainMaterial.clone();
+      this.swatchImage.mainPass.baseTex = this.solidTex;
+      this.swatchImage.mainPass.baseColor = new vec4(
+        this.rgba[0],
+        this.rgba[1],
+        this.rgba[2],
+        1
+      );
     }
     if (this.wheelImage) {
       this.wheelImage.mainMaterial = this.wheelImage.mainMaterial.clone();
@@ -268,12 +288,24 @@ export class ColorPickerController extends BaseScriptComponent {
       if (knobs[i]) {
         knobs[i].anchors.setCenter(new vec2(this.rgba[i] * 2 - 1, 0));
       }
+      if (this.valueTexts && this.valueTexts[i]) {
+        this.valueTexts[i].text = String(Math.round(this.rgba[i] * 255));
+      }
+    }
+    if (this.swatchImage) {
+      this.swatchImage.mainPass.baseColor = new vec4(
+        this.rgba[0],
+        this.rgba[1],
+        this.rgba[2],
+        1
+      );
     }
   }
 
   private setOpen(v: boolean) {
     this.open = v;
     this.draggingSlider = -1;
+    if (this.sndClick) this.sndClick.play(1);
     if (this.panelRoot) this.panelRoot.enabled = v;
     if (this.paintController) {
       this.paintController.setSuspended(v);

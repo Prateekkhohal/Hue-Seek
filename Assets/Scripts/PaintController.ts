@@ -90,6 +90,15 @@ export class PaintController extends BaseScriptComponent {
   @input
   pickerCursorOffset: vec2;
 
+  @input
+  sndBrush: AudioComponent; // soft blub per paint stamp (throttled)
+
+  @input
+  sndEraser: AudioComponent; // lower blub while erasing
+
+  @input
+  sndPick: AudioComponent; // bright plip when the eyedrop confirms
+
   private paintingEnabled: boolean = false;
   private suspended: boolean = false;
   private eyedropArmed: boolean = false;
@@ -109,6 +118,8 @@ export class PaintController extends BaseScriptComponent {
   private splashMats: { [key: string]: Material } = {};
   private eraserTex: Texture | null = null;
   private eyedropSampler: PixelSampler | null = null;
+  private eyedropTouching: boolean = false; // a preview touch is in progress
+  private lastSfxTime: number = 0;
 
   onAwake() {
     this.createEvent("OnStartEvent").bind(() => {
@@ -148,11 +159,15 @@ export class PaintController extends BaseScriptComponent {
     });
     this.createEvent("TouchEndEvent").bind(() => {
       this.lastTouchPos = null;
-      if (this.eyedropArmed) {
-        // Release confirms the previewed color and ends eyedrop mode.
+      // Only a release of an actual PREVIEW touch confirms the eyedrop.
+      // (The arming tap on the Pick button ends on this same event — its
+      // release must NOT count, or the eyedrop disarms instantly.)
+      if (this.eyedropArmed && this.eyedropTouching) {
         this.eyedropArmed = false;
         this.eyedropSampler = null;
+        if (this.sndPick) this.sndPick.play(1);
       }
+      this.eyedropTouching = false;
       this.hideCursor();
     });
     this.createEvent("UpdateEvent").bind(() => this.updateSplashes());
@@ -297,6 +312,7 @@ export class PaintController extends BaseScriptComponent {
   private onTouchStart(screenPos: vec2) {
     if (this.eyedropArmed && this.paintingEnabled && !this.suspended) {
       // Stay armed: the drag live-previews; release confirms.
+      this.eyedropTouching = true;
       this.eyedropLive(screenPos);
       this.updateCursor(screenPos, true);
       return;
@@ -427,6 +443,14 @@ export class PaintController extends BaseScriptComponent {
 
       if (!eraser) {
         this.spawnSplash(hit, this.currentColor);
+      }
+
+      // Stamp sound, throttled so strokes don't machine-gun the clip.
+      const now = getTime();
+      if (now - this.lastSfxTime > 0.12) {
+        this.lastSfxTime = now;
+        const snd = eraser ? this.sndEraser : this.sndBrush;
+        if (snd) snd.play(1);
       }
     } catch (e) {
       print("Paint: stamp failed - " + e);

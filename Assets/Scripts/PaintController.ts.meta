@@ -41,6 +41,9 @@
     maxDabs: false
     pickerCursorOffset: false
     pickerCursorTexture: false
+    sndBrush: false
+    sndEraser: false
+    sndPick: false
     splashMaterial: false
     splashMesh: false
   ScriptTypesHidden:
@@ -68,6 +71,9 @@
       eraserCursorTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
       brushCursorOffset: !<Vec2> {x: 0.000000, y: 0.000000}
       pickerCursorOffset: !<Vec2> {x: 0.000000, y: 0.000000}
+      sndBrush: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
+      sndEraser: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
+      sndPick: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
@@ -88,3 +94,6 @@
     - // @input Asset.Texture eraserCursorTexture
     - // @input vec2 brushCursorOffset
     - // @input vec2 pickerCursorOffset
+    - // @input Component.AudioComponent sndBrush
+    - // @input Component.AudioComponent sndEraser
+    - // @input Component.AudioComponent sndPick

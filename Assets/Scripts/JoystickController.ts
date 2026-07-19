@@ -23,7 +23,7 @@ export class JoystickController extends BaseScriptComponent {
   moveSpeed: number = 50; // world units/sec at full deflection
 
   @input
-  clampX: number = 40; // |x| limit for character position
+  clampX: number = 40; // legacy fallback clamps (used when no moveAreaST)
 
   @input
   clampYTop: number = 25;
@@ -31,7 +31,27 @@ export class JoystickController extends BaseScriptComponent {
   @input
   clampYBottom: number = 45;
 
+  @input
+  camera: Camera; // main perspective camera, for screen->world at char depth
+
+  @input
+  moveAreaST: ScreenTransform; // screen region the character must stay inside
+
+  @input
+  bodyHalfX: number = 6; // world-unit body extents kept inside the area
+
+  @input
+  bodyHalfUp: number = 10;
+
+  @input
+  bodyHalfDown: number = 12;
+
+  @input
+  sndMove: AudioComponent; // soft blub loop while the joystick is held
+
   private roundActive: boolean = false;
+  private worldMin: vec2 | null = null;
+  private worldMax: vec2 | null = null;
   private dragging: boolean = false;
   private touchId: number = -1;
   private anchorPos: vec2 = vec2.zero(); // where the touch started
@@ -73,11 +93,38 @@ export class JoystickController extends BaseScriptComponent {
 
   setActive(active: boolean) {
     this.roundActive = active;
-    if (!active) {
+    if (active) {
+      this.computeMoveArea();
+    } else {
       this.dragging = false;
       this.dir = vec2.zero();
       this.resetKnob();
+      if (this.sndMove && this.sndMove.isPlaying()) this.sndMove.stop(true);
     }
+  }
+
+  // Project the screen region's corners into world space at the character's
+  // depth so the movement bounds always match the visible/safe area.
+  private computeMoveArea() {
+    this.worldMin = null;
+    this.worldMax = null;
+    if (!this.camera || !this.moveAreaST || !this.characterRoot) return;
+    const camPos = this.camera.getTransform().getWorldPosition();
+    const charPos = this.characterRoot.getTransform().getWorldPosition();
+    const dist = charPos.distance(camPos);
+    const minScreen = this.moveAreaST.localPointToScreenPoint(new vec2(-1, -1));
+    const maxScreen = this.moveAreaST.localPointToScreenPoint(new vec2(1, 1));
+    if (!minScreen || !maxScreen) return;
+    const a = this.camera.screenSpaceToWorldSpace(minScreen, dist);
+    const b = this.camera.screenSpaceToWorldSpace(maxScreen, dist);
+    this.worldMin = new vec2(
+      Math.min(a.x, b.x) + this.bodyHalfX,
+      Math.min(a.y, b.y) + this.bodyHalfDown
+    );
+    this.worldMax = new vec2(
+      Math.max(a.x, b.x) - this.bodyHalfX,
+      Math.max(a.y, b.y) - this.bodyHalfUp
+    );
   }
 
   private onTouchStart(e: TouchStartEvent) {
@@ -87,6 +134,11 @@ export class JoystickController extends BaseScriptComponent {
       this.dragging = true;
       this.touchId = e.getTouchId();
       this.anchorPos = pos;
+      if (this.sndMove && !this.sndMove.isPlaying()) {
+        this.sndMove.fadeInTime = 0.1;
+        this.sndMove.fadeOutTime = 0.2;
+        this.sndMove.play(-1); // loop until the drag ends
+      }
     }
   }
 
@@ -107,6 +159,7 @@ export class JoystickController extends BaseScriptComponent {
     this.dragging = false;
     this.dir = vec2.zero();
     this.resetKnob();
+    if (this.sndMove) this.sndMove.stop(true);
   }
 
   private onUpdate() {
@@ -118,8 +171,14 @@ export class JoystickController extends BaseScriptComponent {
     // Screen y grows downward; world y grows upward.
     p.x += this.dir.x * this.moveSpeed * dt;
     p.y += -this.dir.y * this.moveSpeed * dt;
-    p.x = Math.max(-this.clampX, Math.min(this.clampX, p.x));
-    p.y = Math.max(-this.clampYBottom, Math.min(this.clampYTop, p.y));
+    if (this.worldMin && this.worldMax) {
+      // Bounds derived from the screen region at round start.
+      p.x = Math.max(this.worldMin.x, Math.min(this.worldMax.x, p.x));
+      p.y = Math.max(this.worldMin.y, Math.min(this.worldMax.y, p.y));
+    } else {
+      p.x = Math.max(-this.clampX, Math.min(this.clampX, p.x));
+      p.y = Math.max(-this.clampYBottom, Math.min(this.clampYTop, p.y));
+    }
     t.setWorldPosition(p);
   }
 

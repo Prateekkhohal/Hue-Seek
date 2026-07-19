@@ -31,15 +31,26 @@
     finishSadTexture: false
     landingRoot: false
     liveButtonText: false
+    liveIconImage: false
+    liveIconTexture: false
     pictureButtonText: false
+    pictureIconImage: false
+    pictureIconTexture: false
     roundManager: false
     roundRoot: false
     scoreBackgroundImage: false
-    scoreDetailText: false
+    scoreBarFills: false
+    scoreBarLabels: false
+    scoreBarValues: false
+    scorePanelImage: false
     scoreRoot: false
     scoreTitleText: false
-    scoreVerdictText: false
     sharePromptText: false
+    sndClick: false
+    sndHappy: false
+    sndLanding: false
+    sndSad: false
+    titleText: false
     userCameraRoot: false
   ScriptTypesHidden:
     {}
@@ -55,10 +66,24 @@
       scoreRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       liveButtonText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       pictureButtonText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      liveIconImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      pictureIconImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      liveIconTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      pictureIconTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+      titleText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      sndLanding: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
+      sndClick: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
+      sndHappy: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
+      sndSad: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
       roundManager: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
       scoreTitleText: !<reference.Text> 00000000-0000-0000-0000-000000000000
-      scoreVerdictText: !<reference.Text> 00000000-0000-0000-0000-000000000000
-      scoreDetailText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      scorePanelImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      scoreBarFills: !<reference.ScreenTransform[]>
+        []
+      scoreBarLabels: !<reference.Text[]>
+        []
+      scoreBarValues: !<reference.Text[]>
+        []
       sharePromptText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       userCameraRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       scoreBackgroundImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
@@ -73,10 +98,21 @@
     - // @input SceneObject scoreRoot
     - // @input Component.Text liveButtonText
     - // @input Component.Text pictureButtonText
+    - // @input Component.Image liveIconImage
+    - // @input Component.Image pictureIconImage
+    - // @input Asset.Texture liveIconTexture
+    - // @input Asset.Texture pictureIconTexture
+    - // @input Component.Text titleText
+    - // @input Component.AudioComponent sndLanding
+    - // @input Component.AudioComponent sndClick
+    - // @input Component.AudioComponent sndHappy
+    - // @input Component.AudioComponent sndSad
     - // @input AssignableType_1 roundManager
     - // @input Component.Text scoreTitleText
-    - // @input Component.Text scoreVerdictText
-    - // @input Component.Text scoreDetailText
+    - // @input Component.Image scorePanelImage
+    - "// @input Component.ScreenTransform[] scoreBarFills"
+    - "// @input Component.Text[] scoreBarLabels"
+    - "// @input Component.Text[] scoreBarValues"
     - // @input Component.Text sharePromptText
     - // @input SceneObject userCameraRoot
     - // @input Component.Image scoreBackgroundImage
