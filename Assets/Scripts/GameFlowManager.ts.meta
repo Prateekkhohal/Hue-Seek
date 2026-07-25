@@ -27,8 +27,6 @@
   ExportUid: 00000000-0000-0000-0000-000000000000
   PackagePolicy: CanBeUnpacked
   ScriptInputsHidden:
-    finishHappyTexture: false
-    finishSadTexture: false
     landingRoot: false
     liveButtonText: false
     liveIconImage: false
@@ -38,11 +36,6 @@
     pictureIconTexture: false
     roundManager: false
     roundRoot: false
-    scoreBackgroundImage: false
-    scoreBarFills: false
-    scoreBarLabels: false
-    scoreBarValues: false
-    scorePanelImage: false
     scoreRoot: false
     scoreTitleText: false
     sharePromptText: false
@@ -77,18 +70,8 @@
       sndSad: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
       roundManager: !<MappingBased.AssignableType_1> 00000000-0000-0000-0000-000000000000
       scoreTitleText: !<reference.Text> 00000000-0000-0000-0000-000000000000
-      scorePanelImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
-      scoreBarFills: !<reference.ScreenTransform[]>
-        []
-      scoreBarLabels: !<reference.Text[]>
-        []
-      scoreBarValues: !<reference.Text[]>
-        []
       sharePromptText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       userCameraRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
-      scoreBackgroundImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
-      finishHappyTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
-      finishSadTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
@@ -109,12 +92,5 @@
     - // @input Component.AudioComponent sndSad
     - // @input AssignableType_1 roundManager
     - // @input Component.Text scoreTitleText
-    - // @input Component.Image scorePanelImage
-    - "// @input Component.ScreenTransform[] scoreBarFills"
-    - "// @input Component.Text[] scoreBarLabels"
-    - "// @input Component.Text[] scoreBarValues"
     - // @input Component.Text sharePromptText
     - // @input SceneObject userCameraRoot
-    - // @input Component.Image scoreBackgroundImage
-    - // @input Asset.Texture finishHappyTexture
-    - // @input Asset.Texture finishSadTexture

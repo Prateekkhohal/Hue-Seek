@@ -265,6 +265,30 @@ Current feature set (each user-requested and verified):
     cam-char distance) — clamps now match the visible capture area on
     every device; legacy clampX/Y kept as fallback. Verified: hard
     joystick drag stops the character fully on-screen at the corner.
+  2026-07-25 (user request): RESULT SCREEN REMOVED — the full-screen
+  Finish art hid the art the player had just painted. The round view
+  now stays on screen at score time (stage picture / live feed +
+  painted character; only the Round HUD root is swapped for the Score
+  root) and just two texts overlay it: "AI Score: NN" (counts up over
+  1s with an 18% pop, tinted green when hidden / red when spotted) and
+  a bottom block "share with friends + tap to play again". VERDICT TEXT
+  REMOVED again on user request the same day — the score number, its
+  green/red tint and the happy/sad SFX carry the beat.
+  Deleted from the scene: FinishBackground, ScorePanel(+Bg), all
+  BarLabel*/BarTrack*/BarFill*/BarValue* rows. Removed from
+  GameFlowManager: scorePanelImage, scoreBarFills/Labels/Values,
+  scoreBackgroundImage, finishHappyTexture/finishSadTexture inputs and
+  setupScoreBars/startScoreBars/animateScoreBars/setupScoreBackground
+  (replaced by setupScoreOverlay/animateScoreReveal). Readability now
+  comes from Text outline+dropshadow instead of the glass panel; the
+  title dot borrows its material from liveIconImage (the score panel
+  used to supply it). SharePrompt anchors -1.32..-1.19 (the
+  CaptureArea-Score region compresses anchor space — screen-bottom is
+  well past -1). GOTCHA: assigning ScreenTransform `anchor.bottom` etc.
+  from ExecuteEditorCode silently no-ops; set the whole rect via
+  scene-graphql setProperty valueType: RECT. Finish-Happy/Finish-Sad
+  JPGs (238 KB) are now unreferenced — left on disk, delete if the
+  export needs the space.
 - Joystick: user-positioned, controller icon base + circle knob marker.
 - DynaPuff-SemiBold font applied to all 19 Texts.
 - Icons (user-added, black → whitened at runtime for tinting):
@@ -394,7 +418,7 @@ scene-serialized @input values override script defaults after edits.
 - [x] Creativity Score: color variety (70%) + evenness (30%)
 - [x] Algorithm Score: coverage (60%) + body parts painted (40%)
 - [x] Combined **AI Score** = blend 50% + creativity 20% + technique 30%; `hiddenThreshold` (65) tunable in Inspector
-- [x] Score screen: AI Score + NOT FOUND/SPOTTED verdict + breakdown + share-with-friends prompt, painted character stays visible
+- [x] Score overlay (no separate screen, 2026-07-25): AI Score (green/red tint = hidden/spotted) + share-with-friends prompt drawn straight over the finished art
 - [x] Play Again → tap returns to Landing, stage/character hidden, paint reset
 - [ ] Tune: more playtesting of weights/threshold once painting by hand (not injected gestures) is possible
 - [ ] Verify Live-mode scoring path on device (camera texture sampling at score time)

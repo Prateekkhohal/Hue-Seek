@@ -3,6 +3,12 @@
 // Owns the landing screen (title, Live/Picture mode buttons, 60/120/240s
 // timer picker) and decides which UI root is visible.
 //
+// Score state (user decision 2026-07-25): there is NO separate result
+// screen any more — the full-screen finish art, the glass panel and the
+// three breakdown bars all hid the art the player just painted. The round
+// stays on screen exactly as the player left it (stage background +
+// painted character) and only the AI Score + verdict line is overlaid.
+//
 import { RoundManager } from "./RoundManager";
 import { makeSolidWhiteTexture } from "./PaletteSampler";
 
@@ -58,49 +64,23 @@ export class GameFlowManager extends BaseScriptComponent {
   roundManager: RoundManager;
 
   @input
-  scoreTitleText: Text; // big "AI Score: NN"
+  scoreTitleText: Text; // big "AI Score: NN" overlaid on the finished art
 
   @input
-  scorePanelImage: Image; // glassy backdrop behind the bars + share text
-
-  @input
-  scoreBarFills: ScreenTransform[]; // [Blend, Creativity, Technique] bar fills
-
-  @input
-  scoreBarLabels: Text[]; // name labels on the left of each bar
-
-  @input
-  scoreBarValues: Text[]; // numeric values at the right end of each bar
-
-  @input
-  sharePromptText: Text; // share nudge + play-again hint
+  sharePromptText: Text; // verdict line + share nudge + play-again hint
 
   @input
   userCameraRoot: SceneObject; // circular face-cam UI — hidden during LIVE rounds
-
-  @input
-  scoreBackgroundImage: Image; // full-screen Finish art behind the score texts
-
-  @input
-  finishHappyTexture: Texture; // NOT FOUND (hidden) result art
-
-  @input
-  finishSadTexture: Texture; // SPOTTED result art
 
   private state: FlowState = "landing";
   private selectedMode: GameMode = "picture";
   // Fixed round length (user decision 2026-07-17: no timer picker).
   private selectedDurationSec: number = 60;
 
-  // Score-bar animation: fills grow 0 -> value with an ease-out.
-  private static readonly BAR_COLORS = [
-    new vec4(0.31, 0.76, 0.97, 1), // Blend — sky blue
-    new vec4(1.0, 0.43, 0.78, 1), // Creativity — pink
-    new vec4(0.49, 0.85, 0.34, 1), // Technique — green
-  ];
-  private static readonly BAR_NAMES = ["Blend", "Creativity", "Technique"];
-  private barTargets: number[] = [0, 0, 0]; // 0..1
-  private barAnimT: number = -1; // <0 = idle
+  // Score reveal: the number counts up 0 -> aiScore with a single pop.
+  private static readonly SCORE_REVEAL = 1.0; // s
+  private scoreTarget: number = 0;
+  private scoreAnimT: number = -1; // <0 = idle
 
   // Title intro: a paint dot hops across the arched letters, popping each
   // one, then the whole title does a final scale pop.
@@ -138,8 +118,7 @@ export class GameFlowManager extends BaseScriptComponent {
     this.createEvent("OnStartEvent").bind(() => {
       this.styleAllButtons();
       this.setupArchedTitle();
-      this.setupScoreBackground();
-      this.setupScoreBars();
+      this.setupScoreOverlay();
       if (this.roundManager) {
         this.roundManager.setOnRoundEnd(() => this.showScore());
       }
@@ -149,7 +128,7 @@ export class GameFlowManager extends BaseScriptComponent {
       this.onTouch(e.getTouchPosition())
     );
     this.createEvent("UpdateEvent").bind(() => {
-      this.animateScoreBars();
+      this.animateScoreReveal();
       this.animateModeTiles();
       this.animateTitle();
     });
@@ -199,29 +178,33 @@ export class GameFlowManager extends BaseScriptComponent {
     );
   }
 
+  // Round over: the stage + painted character stay exactly as the player
+  // left them. Only the round HUD (joystick, timer, submit, color picker)
+  // is swapped out for the score overlay.
   showScore() {
     this.state = "score";
     this.setRootsVisible(false, false, true);
     this.setUserCameraVisible(true);
 
     const s = this.roundManager ? this.roundManager.getLastScore() : null;
-    if (s) {
-      if (this.scoreBackgroundImage) {
-        const art = s.hidden ? this.finishHappyTexture : this.finishSadTexture;
-        if (art) this.scoreBackgroundImage.mainPass.baseTex = art;
-      }
-      if (this.scoreTitleText) {
-        this.scoreTitleText.text = "AI Score: " + s.aiScore;
-      }
-      // No verdict text — the Happy/Sad finish art IS the verdict.
-      this.startScoreBars([s.blend, s.creativity, s.algorithm]);
-      const resultSnd = s.hidden ? this.sndHappy : this.sndSad;
-      if (resultSnd) resultSnd.play(1);
-      if (this.sharePromptText) {
-        this.sharePromptText.text =
-          "Share with friends - who hides best?\nTap to play again";
-      }
+    if (!s) return;
+
+    this.scoreTarget = s.aiScore;
+    this.scoreAnimT = 0;
+    if (this.scoreTitleText) {
+      this.scoreTitleText.text = "AI Score: 0";
+      this.scoreTitleText.textFill.color = s.hidden
+        ? new vec4(0.49, 0.85, 0.34, 1) // hidden — green
+        : new vec4(1, 0.43, 0.43, 1); // spotted — red
     }
+    // No verdict text (user decision 2026-07-25) — the score itself and
+    // its green/red tint carry the hidden/spotted beat.
+    if (this.sharePromptText) {
+      this.sharePromptText.text =
+        "Share with friends - who hides best?\nTap to play again";
+    }
+    const resultSnd = s.hidden ? this.sndHappy : this.sndSad;
+    if (resultSnd) resultSnd.play(1);
   }
 
   private setRootsVisible(landing: boolean, round: boolean, score: boolean) {
@@ -234,83 +217,41 @@ export class GameFlowManager extends BaseScriptComponent {
     if (this.userCameraRoot) this.userCameraRoot.enabled = visible;
   }
 
-  private setupScoreBars() {
-    if (this.scorePanelImage) {
-      // Dark frosted-glass backdrop so the result UI reads over any art.
-      this.scorePanelImage.mainMaterial =
-        this.scorePanelImage.mainMaterial.clone();
-      this.scorePanelImage.mainPass.baseTex = makeSolidWhiteTexture();
-      this.scorePanelImage.mainPass.baseColor = new vec4(0.07, 0.09, 0.13, 0.45);
-    }
-    if (!this.scoreBarFills) return;
-    for (let i = 0; i < this.scoreBarFills.length; i++) {
-      const fillST = this.scoreBarFills[i];
-      if (!fillST) continue;
-      const fillImg = fillST
-        .getSceneObject()
-        .getComponent("Component.Image") as Image;
-      if (fillImg) {
-        fillImg.mainMaterial = fillImg.mainMaterial.clone();
-        fillImg.mainPass.baseTex = makeSolidWhiteTexture();
-        fillImg.mainPass.baseColor = GameFlowManager.BAR_COLORS[i % 3];
-      }
-      // The fill's parent object is the track — dark translucent.
-      const trackImg = fillST
-        .getSceneObject()
-        .getParent()
-        .getComponent("Component.Image") as Image;
-      if (trackImg) {
-        trackImg.mainMaterial = trackImg.mainMaterial.clone();
-        trackImg.mainPass.baseTex = makeSolidWhiteTexture();
-        trackImg.mainPass.baseColor = new vec4(0, 0, 0, 0.45);
-      }
-      fillST.anchors.right = -1; // start empty
-    }
+  // No panel behind the score any more — heavy outlines keep both texts
+  // readable over whatever the player painted.
+  private setupScoreOverlay() {
+    this.outlineText(this.scoreTitleText, 0.45);
+    this.outlineText(this.sharePromptText, 0.6);
   }
 
-  private startScoreBars(values: number[]) {
-    for (let i = 0; i < 3; i++) {
-      this.barTargets[i] = Math.max(0, Math.min(1, (values[i] || 0) / 100));
-      if (this.scoreBarLabels && this.scoreBarLabels[i]) {
-        this.scoreBarLabels[i].text = GameFlowManager.BAR_NAMES[i];
-      }
-      if (this.scoreBarValues && this.scoreBarValues[i]) {
-        this.scoreBarValues[i].text = "0";
-      }
-      if (this.scoreBarFills && this.scoreBarFills[i]) {
-        this.scoreBarFills[i].anchors.right = -1;
-      }
-    }
-    this.barAnimT = 0;
+  private outlineText(txt: Text, size: number) {
+    if (!txt) return;
+    txt.backgroundSettings.enabled = false;
+    txt.outlineSettings.enabled = true;
+    txt.outlineSettings.fill.color = new vec4(0, 0, 0, 0.85);
+    txt.outlineSettings.size = size;
+    txt.dropshadowSettings.enabled = true;
+    txt.dropshadowSettings.fill.color = new vec4(0, 0, 0, 0.5);
   }
 
-  private animateScoreBars() {
-    if (this.barAnimT < 0 || !this.scoreBarFills) return;
-    this.barAnimT = Math.min(this.barAnimT + getDeltaTime() / 1.2, 1);
-    const p = 1 - Math.pow(1 - this.barAnimT, 3); // ease-out cubic
-    for (let i = 0; i < 3; i++) {
-      const fill = this.scoreBarFills[i];
-      if (fill) {
-        fill.anchors.right = -1 + 2 * this.barTargets[i] * p;
-      }
-      // The number counts up in sync with its bar.
-      if (this.scoreBarValues && this.scoreBarValues[i]) {
-        this.scoreBarValues[i].text = String(
-          Math.round(this.barTargets[i] * 100 * p)
-        );
-      }
+  // The score counts up and the text pops once — replaces the old bars.
+  private animateScoreReveal() {
+    if (this.scoreAnimT < 0 || !this.scoreTitleText) return;
+    this.scoreAnimT = Math.min(
+      this.scoreAnimT + getDeltaTime() / GameFlowManager.SCORE_REVEAL,
+      1
+    );
+    const p = 1 - Math.pow(1 - this.scoreAnimT, 3); // ease-out cubic
+    this.scoreTitleText.text =
+      "AI Score: " + Math.round(this.scoreTarget * p);
+    const st = this.scoreTitleText
+      .getSceneObject()
+      .getComponent("Component.ScreenTransform") as ScreenTransform;
+    if (st) {
+      const s = 1 + 0.18 * Math.sin(p * Math.PI);
+      st.scale = new vec3(s, s, 1);
     }
-    if (this.barAnimT >= 1) this.barAnimT = -1;
-  }
-
-  private setupScoreBackground() {
-    if (!this.scoreBackgroundImage) return;
-    this.scoreBackgroundImage.mainMaterial =
-      this.scoreBackgroundImage.mainMaterial.clone();
-    if (this.finishHappyTexture) {
-      this.scoreBackgroundImage.mainPass.baseTex = this.finishHappyTexture;
-    }
-    this.scoreBackgroundImage.mainPass.baseColor = new vec4(1, 1, 1, 1);
+    if (this.scoreAnimT >= 1) this.scoreAnimT = -1;
   }
 
   // --- input ---
@@ -472,8 +413,11 @@ export class GameFlowManager extends BaseScriptComponent {
     fst.anchors.bottom = -1;
     fst.anchors.top = 1;
     const img = fillObj.createComponent("Component.Image") as Image;
-    if (this.scorePanelImage) {
-      img.mainMaterial = this.scorePanelImage.mainMaterial.clone();
+    // Borrow the flat "Image" material from a landing tile — new Images
+    // come up material-less and the score panel that used to supply it is
+    // gone with the result screen.
+    if (this.liveIconImage) {
+      img.mainMaterial = this.liveIconImage.mainMaterial.clone();
       img.mainPass.baseTex = makeSolidWhiteTexture();
       img.mainPass.baseColor = new vec4(1, 0.55, 0.25, 1); // warm paint orange
     }

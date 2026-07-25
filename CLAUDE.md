@@ -69,9 +69,15 @@ share the Lens with friends to compare scores.
   that slots in behind the same "AI Score" label.
 
 ### Result & sharing
-- Final shareable score screen: AI Score + Found/Spotted beat + prompt
-  to share the Lens with friends (Snapchat's native Send/Share flow —
-  platform-level, not built in-Lens).
+- **No separate result screen** (user decision 2026-07-25): a full-screen
+  finish card hid the art the player just painted. When the round ends
+  the stage/live background + painted character stay on screen exactly
+  as left; the Round HUD is replaced by a thin overlay — AI Score
+  (counts up, green when hidden / red when spotted) and the prompt to
+  share the Lens with friends (Snapchat's native Send/Share flow —
+  platform-level, not built in-Lens). No verdict text, no breakdown
+  bars, no glass panel: the score's tint and the happy/sad SFX carry
+  the Found/Spotted beat.
 
 ### Hard budget
 - **8 MB max Lens size.** The 11 pictures are 768×1344 PNGs, ~17.6 MB raw
