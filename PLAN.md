@@ -283,10 +283,20 @@ Current feature set (each user-requested and verified):
   comes from Text outline+dropshadow instead of the glass panel; the
   title dot borrows its material from liveIconImage (the score panel
   used to supply it). SharePrompt anchors -1.32..-1.19 (the
-  CaptureArea-Score region compresses anchor space — screen-bottom is
-  well past -1). GOTCHA: assigning ScreenTransform `anchor.bottom` etc.
-  from ExecuteEditorCode silently no-ops; set the whole rect via
-  scene-graphql setProperty valueType: RECT. Finish-Happy/Finish-Sad
+  CaptureArea-Score region compresses anchor space, so its anchors are
+  tuned per-region: -0.88..-0.75 sits above the bottom edge on a
+  full-screen sim AND inside the safe area on an inset one; do NOT push
+  anchors past -1 to "reach" the bottom, that was tuned against one
+  device sim and vanished off-screen on another).
+  **PERSISTENCE GOTCHA (cost a full redo):** scene mutations made from
+  ExecuteEditorCode — `sceneObject.destroy()`, `st.anchor.bottom = x`,
+  `text.size = n` — do NOT commit. They apply to the live session (the
+  Preview even renders them) but bypass the editor's model/undo stack,
+  so they silently revert and never reach Scene.scene on disk. ALWAYS
+  mutate the scene via scene-graphql (`deleteSceneObject`,
+  `setProperty … valueType: RECT/NUMBER`), then persist with
+  `await pluginSystem.findInterface(Editor.Model.IModel).project.save()`
+  (takes no args), and confirm by grepping Assets/Scene.scene. Finish-Happy/Finish-Sad
   JPGs (238 KB) are now unreferenced — left on disk, delete if the
   export needs the space.
 - Joystick: user-positioned, controller icon base + circle knob marker.
