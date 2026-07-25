@@ -28,7 +28,7 @@ metaInfo:
     - CameraKit
   platformBundlesEnabled: false
   iconHash: 63b2e6aea076bff7df43f9ce94d46575
-  videoPreviewHash: 0a1d65a06d6266b4d5e9975993acd1c5
+  videoPreviewHash: b45143ff4220e2e402ecb57ba94a8dd0
   fromTemplateName: Default
   fromTemplateUrl: Lens Studio 5.22.1.26062503
   activationCamera: Front
