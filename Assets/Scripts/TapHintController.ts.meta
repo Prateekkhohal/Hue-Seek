@@ -1,0 +1,55 @@
+- !<AssetImportMetadata/d484ab08-2dab-49d9-8ece-8223e7e242a6>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 2f328ff1-20bf-4c56-96e3-8e9cde4acbc4
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 2f328ff1-20bf-4c56-96e3-8e9cde4acbc4
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> e75ef30d-1118-4c19-b0c3-9c733a6b7cd4
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/e75ef30d-1118-4c19-b0c3-9c733a6b7cd4>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  VersionPrerelease: ""
+  UpdateOrder: 0
+  ComponentUid: d318edb0-a168-463b-ac72-60a5fb62caa6
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    liveHintImage: false
+    pictureHintImage: false
+    stageHintHoldSec: false
+    stageHintImage: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - liveHintImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      pictureHintImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      stageHintImage: !<reference.Image> 00000000-0000-0000-0000-000000000000
+      stageHintHoldSec: !<float> 3.000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input Component.Image liveHintImage
+    - // @input Component.Image pictureHintImage
+    - // @input Component.Image stageHintImage
+    - // @input float stageHintHoldSec = 3

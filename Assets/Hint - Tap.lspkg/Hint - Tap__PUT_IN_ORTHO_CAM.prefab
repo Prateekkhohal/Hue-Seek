@@ -1,0 +1,199 @@
+- !<ObjectPrefab/dcc492f4-af02-4479-980c-e679f53593c6>
+  PackagePath: ""
+  objects:
+    - !<own> 9ad70a37-44cd-4786-ad91-4b1b6fc2608d
+  LazyLoading: false
+  RetainAssets: true
+  PreviewEnvironment: !<reference> 00000000-0000-0000-0000-000000000000
+- !<SceneObject/079ce638-8741-4640-a6d5-d8511a8b7803>
+  PrefabRemaps:
+    []
+  Name: Tap No Dot
+  Enabled: true
+  Layers: 1048576
+  LocalTransform: !<TransformEntity>
+    Position: {x: -0.096775, y: -0.750613, z: -80.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 3411d6d3-ef1e-41bb-8316-32da7bd146cb
+    - !<own> 3a177c75-2b21-49cb-b199-b3b0dbc4d7e5
+    - !<own> 50b0c22f-beb8-4611-a72f-bf18a7f3e0bf
+- !<ScreenRegionComponent/2e10d06d-8acd-4990-85c3-8750b8ae3696>
+  PrefabRemaps:
+    []
+  Name: Screen Region
+  Enabled: true
+  ScreenRegionType: FullFrame
+  ResizeWithKeyboard: false
+- !<ScreenTransform/3411d6d3-ef1e-41bb-8316-32da7bd146cb>
+  PrefabRemaps:
+    []
+  Name: Screen Transform
+  Enabled: true
+  IsAdvanced: false
+  Constraints:
+    pinToLeft: false
+    pinToTop: false
+    pinToRight: false
+    pinToBottom: false
+    fixedWidth: false
+    fixedHeight: false
+    deactivatedFixedSprite: false
+    deactivatedFixedPivot: false
+  Pivot: {x: 0.000000, y: 0.000000}
+  Transform:
+    position: {x: -0.096775, y: -0.750613, z: -80.000000}
+    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  RawMode: true
+  ForceBasic: true
+  EnableDebugRender: false
+  Anchor:
+    left: -0.289531
+    bottom: -0.193975
+    right: 0.253574
+    top: 0.043853
+  Offset:
+    left: 0.000000
+    bottom: 0.000000
+    right: 0.000000
+    top: 0.000000
+- !<ScriptComponent/3a177c75-2b21-49cb-b199-b3b0dbc4d7e5>
+  PrefabRemaps:
+    []
+  Name: VisualDemonstration
+  Enabled: true
+  ScriptAsset: !<reference> f705ac27-bd04-41fe-8cf3-6d3f651318bf
+  ScriptInputsDefault:
+    autostart: true
+    showType: true
+    appearDelay: true
+    repeatCount: true
+    advanced: true
+    disableHiding: true
+    hideOnCapture: true
+    hideOnCameraSwitch: true
+    eventCallbacks: true
+    callbackType: true
+    onVisualDemonstrationStartBehaviors: true
+    onVisualDemonstrationFinishBehaviors: true
+    onVisualDemonstrationStartCustomTriggers: true
+    onVisualDemonstrationFinishCustomTriggers: true
+    customFunctionScript: true
+    onVisualDemonstrationStartFunctions: true
+    onVisualDemonstrationFinishFunctions: true
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      autostart: true
+      visualDemonstration: !<reference.BaseMeshVisual> 50b0c22f-beb8-4611-a72f-bf18a7f3e0bf
+      showType: 2
+      appearDelay: !<float> 0.000000
+      appearDuration: !<float> 0.000000
+      screenDuration: 2.500000
+      disappearDuration: 0.300000
+      repeatCount: 3
+      advanced: false
+      disableHiding: false
+      showOnce: true
+      hideOnCapture: true
+      hideOnCameraSwitch: true
+      eventCallbacks: false
+      callbackType: 0
+      onVisualDemonstrationStartBehaviors: !<reference.ScriptComponent[]>
+        []
+      onVisualDemonstrationFinishBehaviors: !<reference.ScriptComponent[]>
+        []
+      onVisualDemonstrationStartCustomTriggers: !<string[]>
+        []
+      onVisualDemonstrationFinishCustomTriggers: !<string[]>
+        []
+      customFunctionScript: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      onVisualDemonstrationStartFunctions: !<string[]>
+        []
+      onVisualDemonstrationFinishFunctions: !<string[]>
+        []
+  ScriptTypes:
+    "":
+      {}
+- !<Image/50b0c22f-beb8-4611-a72f-bf18a7f3e0bf>
+  PrefabRemaps:
+    []
+  Name: Image
+  Enabled: true
+  RenderOrder: 30
+  StretchMode: Fit
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> 0b33a95f-091f-4243-8d2f-4e28a0e28e4c
+  FlipX: false
+  FlipY: false
+  RotationAngle: 0
+  Pivot: {x: 0.000000, y: 0.000000}
+  ExtentsTarget: !<reference> 00000000-0000-0000-0000-000000000000
+- !<SceneObject/9ad70a37-44cd-4786-ad91-4b1b6fc2608d>
+  PrefabRemaps:
+    - 079ce638-8741-4640-a6d5-d8511a8b7803: 079ce638-8741-4640-592a-27aee57487fc
+    - 2e10d06d-8acd-4990-85c3-8750b8ae3696: 2e10d06d-8acd-4990-7a3c-78af4751c969
+    - 3411d6d3-ef1e-41bb-8316-32da7bd146cb: 3411d6d3-ef1e-41bb-7ce9-cd25842eb934
+    - 3a177c75-2b21-49cb-b199-b3b0dbc4d7e5: 3a177c75-2b21-49cb-4e66-4c4f243b281a
+    - 50b0c22f-beb8-4611-a72f-bf18a7f3e0bf: 50b0c22f-beb8-4611-58d0-40e7580c1f40
+    - 9ad70a37-44cd-4786-ad91-4b1b6fc2608d: 9ad70a37-44cd-4786-526e-b4e4903d9f72
+    - c2c9f102-c186-44be-9160-050ec4e26a98: c2c9f102-c186-44be-6e9f-faf13b1d9567
+  Name: Hint - Tap__PUT_IN_ORTHO_CAM
+  Enabled: true
+  Layers: 1048576
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: -1.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> 079ce638-8741-4640-a6d5-d8511a8b7803
+  Components:
+    - !<own> 2e10d06d-8acd-4990-85c3-8750b8ae3696
+    - !<own> c2c9f102-c186-44be-9160-050ec4e26a98
+- !<ScreenTransform/c2c9f102-c186-44be-9160-050ec4e26a98>
+  PrefabRemaps:
+    []
+  Name: Screen Transform
+  Enabled: true
+  IsAdvanced: false
+  Constraints:
+    pinToLeft: false
+    pinToTop: false
+    pinToRight: false
+    pinToBottom: false
+    fixedWidth: false
+    fixedHeight: false
+    deactivatedFixedSprite: false
+    deactivatedFixedPivot: false
+  Pivot: {x: 0.000000, y: 0.000000}
+  Transform:
+    position: {x: 0.000000, y: 0.000000, z: -1.000000}
+    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  RawMode: true
+  ForceBasic: true
+  EnableDebugRender: false
+  Anchor:
+    left: -1.000000
+    bottom: -1.000000
+    right: 1.000000
+    top: 1.000000
+  Offset:
+    left: 0.000000
+    bottom: 0.000000
+    right: 0.000000
+    top: 0.000000

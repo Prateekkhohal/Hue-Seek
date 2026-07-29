@@ -44,6 +44,7 @@
     sndHappy: false
     sndLanding: false
     sndSad: false
+    tapHints: false
     titleText: false
     userCameraRoot: false
   ScriptTypesHidden:
@@ -73,6 +74,7 @@
       scoreTitleText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       sharePromptText: !<reference.Text> 00000000-0000-0000-0000-000000000000
       userCameraRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      tapHints: !<MappingBased.AssignableType_2> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
@@ -95,3 +97,4 @@
     - // @input Component.Text scoreTitleText
     - // @input Component.Text sharePromptText
     - // @input SceneObject userCameraRoot
+    - // @input AssignableType_2 tapHints

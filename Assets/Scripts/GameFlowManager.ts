@@ -10,6 +10,7 @@
 // painted character) and only the AI Score + verdict line is overlaid.
 //
 import { RoundManager } from "./RoundManager";
+import { TapHintController } from "./TapHintController";
 import { makeSolidWhiteTexture } from "./PaletteSampler";
 
 export type GameMode = "live" | "picture";
@@ -71,6 +72,10 @@ export class GameFlowManager extends BaseScriptComponent {
 
   @input
   userCameraRoot: SceneObject; // circular face-cam UI — hidden during LIVE rounds
+
+  @input
+  @allowUndefined
+  tapHints: TapHintController; // "tap here" hint art on the mode icons + stage
 
   private state: FlowState = "landing";
   private selectedMode: GameMode = "picture";
@@ -150,6 +155,12 @@ export class GameFlowManager extends BaseScriptComponent {
     this.setUserCameraVisible(true);
     this.titleAnimT = 0; // replay the title intro each time we land
     this.playTitleAudio(); // shimmer runs with the animation cycle
+    if (this.tapHints) {
+      // The mode hints loop for as long as the landing screen is up, and come
+      // back on every return to it.
+      this.tapHints.hideStageHint();
+      this.tapHints.showLandingHints();
+    }
     if (this.roundManager) {
       this.roundManager.hideStage();
     }
@@ -166,6 +177,10 @@ export class GameFlowManager extends BaseScriptComponent {
     // In Live mode the whole background IS the camera feed — the circular
     // face-cam cutout is redundant there. Picture mode keeps it.
     this.setUserCameraVisible(mode !== "live");
+    if (this.tapHints) {
+      this.tapHints.hideLandingHints();
+      this.tapHints.showStageHint(); // "tap to paint", fades itself out
+    }
     if (this.roundManager) {
       this.roundManager.beginRound(mode, this.selectedDurationSec);
     }
@@ -185,6 +200,7 @@ export class GameFlowManager extends BaseScriptComponent {
     this.state = "score";
     this.setRootsVisible(false, false, true);
     this.setUserCameraVisible(true);
+    if (this.tapHints) this.tapHints.hideAll();
 
     const s = this.roundManager ? this.roundManager.getLastScore() : null;
     if (!s) return;

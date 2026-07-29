@@ -1,0 +1,42 @@
+- !<NativePackageDescriptor/39886605-df86-402d-93de-fc192c38a509>
+  PackagePath: ""
+  StudioVersion:
+    major: 5
+    minor: 23
+    patch: 0
+    build: 26072806
+    type: Unset
+    buildFlavor: ""
+    timestamp: 0
+    commit: ""
+  Description: |-
+    Tap Provides an animated graphic hint and a helper script that allows to configure hint behavior Most common hint for interactions. Using it when need to emphasize an interactive element. For a clickable area prefer to use the design with feedback instead.
+    
+    Usage:
+    Drag and drop the asset "Hint - Tap__PUT_IN_ORTHO_CAM" into your scene, under the Orthographic Camera. The hint will start playing automatically when the Lens is opened.
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  VersionMajor: 1
+  VersionMinor: 0
+  VersionPatch: 0
+  UpdateCheckpoint: 102
+  ExportUid: b7767326-c9c0-4b08-84c6-e7a3a23b6f66
+  ComponentUid: c9ce9534-9ceb-4137-bc50-194b3c3711df
+  PackagePolicy: CanBeUnpackedTransparent
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  VersionPrerelease: ""
+  Instantiable: !<reference> 00000000-0000-0000-0000-000000000000
+  AssetLibraryDependencyStructure: !<AssetLibraryDependencyStructure>
+    Name: ""
+    AssetId: ""
+    Hash: ""
+    Version:
+      major: 0
+      minor: 0
+      patch: 0
+      build: 0
