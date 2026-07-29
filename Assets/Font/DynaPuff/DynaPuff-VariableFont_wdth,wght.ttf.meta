@@ -8,9 +8,44 @@
   ExtraData:
     {}
   AssetDataMap:
-    {}
+    Font: !<own> f1034ece-6191-48f6-bd10-17c272f9bc99
   DependentFiles:
     []
   ImporterSettings: !<AssetImporterSettings>
     {}
   CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<FontAssetData/f1034ece-6191-48f6-bd10-17c272f9bc99>
+  VariableFontMetadata:
+    axes:
+      - tag: wght
+        name: Weight
+        minValue: 400.000000
+        defaultValue: 400.000000
+        maxValue: 700.000000
+      - tag: wdth
+        name: Width
+        minValue: 75.000000
+        defaultValue: 100.000000
+        maxValue: 100.000000
+    namedInstances:
+      - name: Regular
+        coordinates:
+          - 400.000000
+          - 100.000000
+      - name: Medium
+        coordinates:
+          - 500.000000
+          - 100.000000
+      - name: SemiBold
+        coordinates:
+          - 600.000000
+          - 100.000000
+      - name: Bold
+        coordinates:
+          - 700.000000
+          - 100.000000
+    defaultCoordinates:
+      - 400.000000
+      - 100.000000
+  CustomVariationStyles:
+    []

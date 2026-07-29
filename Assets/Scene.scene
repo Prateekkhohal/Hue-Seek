@@ -20,6 +20,8 @@
   RenderPreviewOutput: !<reference> 923415f5-4245-4675-ade1-6d69d6d23e71
   RenderOverlayOutput: !<reference> 00000000-0000-0000-0000-000000000000
   PhysicsRootWorldSettings: !<reference> 00000000-0000-0000-0000-000000000000
+  HiddenInCaptureLayers: 0
+  HiddenInDisplayLayers: 0
   PrefabPreviewEnvironmentInitialized: false
   PrefabPreviewEnvironment: !<reference> 00000000-0000-0000-0000-000000000000
 - !<SceneObject/00000000-0000-0065-0000-000000000064>
@@ -214,8 +216,7 @@
   SizeToFit: false
   FontSize: 46.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -895,8 +896,7 @@
   SizeToFit: false
   FontSize: 24.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -2157,8 +2157,7 @@
   SizeToFit: false
   FontSize: 14.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -3067,8 +3066,7 @@
   SizeToFit: false
   FontSize: 14.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -3400,8 +3398,7 @@
   SizeToFit: false
   FontSize: 24.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -3555,8 +3552,7 @@
   SizeToFit: false
   FontSize: 16.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -3744,8 +3740,7 @@
   SizeToFit: false
   FontSize: 16.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -3972,8 +3967,7 @@
   SizeToFit: false
   FontSize: 24.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -4329,8 +4323,7 @@
   SizeToFit: false
   FontSize: 72.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -4481,8 +4474,7 @@
   SizeToFit: false
   FontSize: 24.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -4599,8 +4591,7 @@
   SizeToFit: false
   FontSize: 22.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -4718,8 +4709,7 @@
   SizeToFit: false
   FontSize: 24.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -4855,8 +4845,7 @@
   SizeToFit: false
   FontSize: 24.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -5040,8 +5029,7 @@
   SizeToFit: false
   FontSize: 24.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -5141,8 +5129,7 @@
   SizeToFit: false
   FontSize: 64.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -5344,8 +5331,7 @@
   SizeToFit: false
   FontSize: 16.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -5620,8 +5606,7 @@
   SizeToFit: false
   FontSize: 46.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
@@ -5705,8 +5690,7 @@
   SizeToFit: false
   FontSize: 16.000000
   FontSource: !<reference> 87c82772-e936-4a8b-99e3-7eb186f80d7e
-  FontWeight: 600
-  Italic: false
+  PreferredStyle: SemiBold
   LayoutRect:
     left: -7.500000
     bottom: -2.250000
